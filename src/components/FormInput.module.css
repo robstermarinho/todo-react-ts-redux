@@ -24,6 +24,10 @@
 .inputContainer input::placeholder {
   color: var(--gray-300);
 }
+.inputContainer input.inputError {
+  outline: none;
+  border-color: var(--danger);
+}
 
 .inputContainer button {
   display: flex;
@@ -42,13 +46,9 @@
 .inputContainer button:hover {
   background-color: var(--blue);
 }
-.inputContainer button label {
-  font-family: Inter;
+.inputContainer button span {
   font-size: 14px;
   font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0em;
-  text-align: left;
   color: var(--white);
 }
 .inputContainer button svg {

@@ -10,15 +10,18 @@ export interface TaskType {
 
 interface TaskProps {
   task: TaskType;
+  removeTask: (id: string) => void;
 }
 
-export function Task({ task }: TaskProps) {
+export function Task({ task, removeTask }: TaskProps) {
   const [isDone, setIsDone] = useState(task.isDone);
 
   const handleCheckChange = () => {
     setIsDone((prevState) => !prevState);
   };
-
+  const handleRemoveTask = (taskID: string) => {
+    removeTask(taskID);
+  };
   return (
     <div
       className={`${styles.todoItem} ${
@@ -33,9 +36,13 @@ export function Task({ task }: TaskProps) {
 
       <a onClick={handleCheckChange}>{task.title}</a>
 
-      <button type="button">
+      <button onClick={() => handleRemoveTask(task.id)} type="button">
         <Trash size={20} />
       </button>
     </div>
   );
+}
+
+export function EmptyTask() {
+  return <h1>Empty</h1>;
 }
