@@ -1,0 +1,95 @@
+.todoItem {
+  border: 1px solid var(--gray-400);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  gap: 0.75rem;
+
+  background-color: var(--gray-500);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+}
+
+.todoItem > a {
+  flex: 1;
+  cursor: pointer;
+  color: var(--gray-100);
+}
+.todoItem > a:hover {
+  color: var(--gray-200);
+}
+
+.todoItem button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  line-height: 0;
+  border-radius: 2px;
+  padding: 2px;
+}
+.todoItem button:hover {
+  background-color: var(--gray-400);
+}
+.todoItem button svg {
+  color: var(--gray-300);
+}
+.todoItem button:hover svg {
+  color: var(--danger);
+}
+
+.checkboxContainer {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+.checkboxContainer input {
+  height: 1.5rem;
+  width: 1.5rem;
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+}
+
+.checkboxDefault .checkboxContainer {
+  /* background-image: url(../assets/checkbox-default.svg); */
+}
+.checkboxDefault .checkboxContainer:hover {
+  /* background-image: url(../assets/checkbox-default-hover.svg); */
+}
+.checkboxChecked .checkboxContainer {
+  /* background-image: url(../assets/checkbox-checked.svg); */
+}
+.checkboxChecked .checkboxContainer:hover {
+  /* background-image: url(../assets/checkbox-checked-hover.svg); */
+}
+
+.checkboxDefault .checkboxContainer svg {
+  color: var(--blue);
+}
+.checkboxDefault .checkboxContainer:hover svg {
+  color: var(--blue-dark);
+}
+
+.checkboxChecked .checkboxContainer svg {
+  fill: var(--purple);
+}
+.checkboxChecked .checkboxContainer:hover svg {
+  fill: var(--purple-dark);
+}
+
+.checkboxChecked > a {
+  text-decoration: line-through;
+  color: var(--gray-300);
+}
+
+.checkboxChecked > a:hover {
+  color: var(--gray-300);
+}
