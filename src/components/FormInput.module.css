@@ -38,13 +38,14 @@
   border-radius: 0.25rem;
   border: none;
   background-color: var(--blue-dark);
-
-  transition: background-color 0.2s;
+  border: 1px solid var(--blue-dark);
+  transition: all 0.2s;
   padding: 1rem;
 }
 
 .inputContainer button:hover {
   background-color: var(--blue);
+  border: 1px solid var(--blue);
 }
 .inputContainer button span {
   font-size: 14px;

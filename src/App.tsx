@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { v4 as uid } from "uuid";
@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Header } from "./components/Header";
 import { FormInput } from "./components/FormInput";
 import { Info } from "./components/Info";
-import { Task, EmptyTask } from "./components/Task";
+import { Task, EmptyTask, TasksHeader } from "./components/Task";
 import { TaskType } from "./components/Task";
 
 // Initial tasks
@@ -15,26 +15,6 @@ const initialTasks: TaskType[] = [
   // {
   //   id: uid(),
   //   title: "Complete challenge",
-  //   isDone: false,
-  // },
-  // {
-  //   id: uid(),
-  //   title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //   isDone: false,
-  // },
-  // {
-  //   id: uid(),
-  //   title: "Lorem dolor sit amet consectetur adipisicing elit.",
-  //   isDone: true,
-  // },
-  // {
-  //   id: uid(),
-  //   title: "Lorem amet consectetur adipisicing elit.",
-  //   isDone: true,
-  // },
-  // {
-  //   id: uid(),
-  //   title: "Lorem sit amet consectetur adipisicing elit.",
   //   isDone: false,
   // },
 ];
@@ -55,9 +35,20 @@ function App() {
     if (tasks.length === 0) {
       return <EmptyTask />;
     }
-    return tasks.map((task) => (
+
+    let taskList = tasks.map((task) => (
       <Task key={task.id} task={task} removeTask={removeTask} />
     ));
+
+    taskList.unshift(
+      <TasksHeader
+        key={"task-header"}
+        selectAll={setAllTasksState}
+        removeAll={removeAllTasks}
+      />
+    );
+
+    return taskList;
   };
 
   const addTask = (title: string) => {
@@ -76,6 +67,16 @@ function App() {
     toast.success("Task removed successfully!");
   };
 
+  const setAllTasksState = (state: boolean) => {
+    setTasks((prevTasks) => {
+      return prevTasks.map((task) => ({ ...task, isDone: state }));
+    });
+  };
+
+  const removeAllTasks = () => {
+    setTasks([]);
+  };
+
   return (
     <div>
       <Header />
@@ -89,7 +90,7 @@ function App() {
           <div className={styles.todoListContainer}>{renderTasks()}</div>
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer theme="dark" closeOnClick />
     </div>
   );
 }

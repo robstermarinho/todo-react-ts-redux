@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Task.module.css";
 import { Trash, CheckCircle, Circle } from "phosphor-react";
+import clipBoardIcon from "../assets/clipboard-icon.svg";
 
 export interface TaskType {
   id: string;
@@ -13,8 +14,17 @@ interface TaskProps {
   removeTask: (id: string) => void;
 }
 
+interface TasksHeaderProps {
+  selectAll: (nextState: boolean) => void;
+  removeAll: () => void;
+}
+
 export function Task({ task, removeTask }: TaskProps) {
-  const [isDone, setIsDone] = useState(task.isDone);
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    setIsDone(task.isDone);
+  }, [task.isDone]);
 
   const handleCheckChange = () => {
     setIsDone((prevState) => !prevState);
@@ -43,6 +53,50 @@ export function Task({ task, removeTask }: TaskProps) {
   );
 }
 
+export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
+  const [isDone, setIsDone] = useState(false);
+
+  const handleSelectAllChange = () => {
+    setIsDone((prevState) => {
+      return !prevState;
+    });
+    selectAll(!isDone);
+  };
+  const handleRemoveAll = () => {
+    removeAll();
+  };
+  return (
+    <div
+      className={`${styles.todoItem} ${styles.todoItemHeader} ${
+        isDone ? styles.checkboxChecked : styles.checkboxDefault
+      }`}
+    >
+      <div className={`${styles.checkboxContainer}`}>
+        {isDone && <CheckCircle size={22} weight="fill" />}
+        {!isDone && <Circle size={22} weight="duotone" />}
+        <input
+          title="Select All Tasks"
+          checked={isDone}
+          onChange={handleSelectAllChange}
+          type="checkbox"
+        />
+      </div>
+      <a></a>
+      <button title="Remove All Tasks" onClick={handleRemoveAll} type="button">
+        <Trash size={20} />
+      </button>
+    </div>
+  );
+}
+
 export function EmptyTask() {
-  return <h1>Empty</h1>;
+  return (
+    <div className={styles.emptyTask}>
+      <div className={styles.emptyTaskContent}>
+        <img src={clipBoardIcon} alt="Clipboard icon" />
+        <h3>You don't have any tasks registered yet</h3>
+        <p>Create tasks and organize your to-do items.</p>
+      </div>
+    </div>
+  );
 }
