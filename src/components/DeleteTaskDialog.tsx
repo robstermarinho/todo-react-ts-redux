@@ -3,12 +3,20 @@ import styles from "./DeleteTaskDialog.module.css";
 import { Trash } from "phosphor-react";
 interface DeleteTaskDialogProps {
   onSuccess: () => void;
-  taskName: string;
+  title: string;
+  targetName?: string;
+  question: string;
+  cancel_text?: string;
+  confirm_text?: string;
 }
 
 export function DeleteTaskDialog({
   onSuccess,
-  taskName,
+  title,
+  targetName,
+  question,
+  cancel_text,
+  confirm_text,
 }: DeleteTaskDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,15 +36,15 @@ export function DeleteTaskDialog({
       {isOpen && (
         <div className={styles.container}>
           <div className={styles.modal}>
-            <h2>Remove Task</h2>
-            <h4>{taskName}</h4>
-            <p>Are you sure you want to remove this task?</p>
+            <h2>{title}</h2>
+            {targetName && <h4>{targetName}</h4>}
+            <p>{question}</p>
             <div className={styles.buttonsContainer}>
               <button onClick={toggleModal} className={styles.modalCancel}>
-                Cancel
+                {cancel_text ? cancel_text : "Cancel"}
               </button>
               <button onClick={confirmAction} className={styles.modalConfirm}>
-                Yes
+                {confirm_text ? confirm_text : "Confirm"}
               </button>
             </div>
           </div>

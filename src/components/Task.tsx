@@ -69,7 +69,10 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
 
       <DeleteTaskDialog
         onSuccess={() => handleRemoveTask(task.id)}
-        taskName={task.title}
+        title="Remove Task"
+        question="Are you sure you want to remove this task?"
+        targetName={task.title}
+        confirm_text="Remove Task"
       />
     </motion.div>
   );
@@ -110,10 +113,13 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
           type="checkbox"
         />
       </div>
-      <a></a>
-      <button title="Remove All Tasks" onClick={handleRemoveAll} type="button">
-        <Trash size={20} />
-      </button>
+
+      <DeleteTaskDialog
+        onSuccess={handleRemoveAll}
+        title="Remove All Tasks"
+        question="Are you sure you want to remove all tasks?"
+        confirm_text="Remove All"
+      />
     </motion.div>
   );
 }
