@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { v4 as uid } from "uuid";
@@ -11,16 +11,20 @@ import { Task, EmptyTask, TasksHeader } from "./components/Task";
 import { TaskType } from "./components/Task";
 
 // Initial tasks
-const initialTasks: TaskType[] = [
-  // {
-  //   id: uid(),
-  //   title: "Complete challenge",
-  //   isDone: false,
-  // },
-];
+const initialTasks: TaskType[] = [];
 
 function App() {
   const [tasks, setTasks] = useState(initialTasks);
+
+  const setAllTasksisDoneWithState = (state: boolean) => {
+    setTasks((prevTasks) => {
+      return prevTasks.map((task) => ({ ...task, isDone: state }));
+    });
+  };
+
+  const removeAllTasks = () => {
+    setTasks([]);
+  };
 
   const numberOfTasks = useMemo((): string => {
     return `${tasks.length}`;
@@ -28,7 +32,7 @@ function App() {
 
   const numberOfDoneTasks = useMemo((): string => {
     let doneTasks = tasks.filter((task) => task.isDone);
-    return `${doneTasks.length} of ${tasks.length}`;
+    return `${doneTasks.length} of ${numberOfTasks}`;
   }, [tasks]);
 
   const renderTasks = () => {
@@ -37,13 +41,18 @@ function App() {
     }
 
     let taskList = tasks.map((task) => (
-      <Task key={task.id} task={task} removeTask={removeTask} />
+      <Task
+        key={task.id}
+        task={task}
+        removeTask={removeTask}
+        toggleTaskState={toggleTaskState}
+      />
     ));
 
     taskList.unshift(
       <TasksHeader
         key={"task-header"}
-        selectAll={setAllTasksState}
+        selectAll={setAllTasksisDoneWithState}
         removeAll={removeAllTasks}
       />
     );
@@ -67,14 +76,15 @@ function App() {
     toast.success("Task removed successfully!");
   };
 
-  const setAllTasksState = (state: boolean) => {
+  const toggleTaskState = (id: string) => {
     setTasks((prevTasks) => {
-      return prevTasks.map((task) => ({ ...task, isDone: state }));
+      return prevTasks.map((task) => {
+        if (task.id === id) {
+          return { ...task, isDone: !task.isDone };
+        }
+        return task;
+      });
     });
-  };
-
-  const removeAllTasks = () => {
-    setTasks([]);
   };
 
   return (

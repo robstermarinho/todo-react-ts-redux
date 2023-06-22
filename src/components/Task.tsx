@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./Task.module.css";
 import { Trash, CheckCircle, Circle } from "phosphor-react";
 import clipBoardIcon from "../assets/clipboard-icon.svg";
@@ -12,6 +12,7 @@ export interface TaskType {
 interface TaskProps {
   task: TaskType;
   removeTask: (id: string) => void;
+  toggleTaskState: (id: string) => void;
 }
 
 interface TasksHeaderProps {
@@ -19,32 +20,32 @@ interface TasksHeaderProps {
   removeAll: () => void;
 }
 
-export function Task({ task, removeTask }: TaskProps) {
-  const [isDone, setIsDone] = useState(false);
-
-  useEffect(() => {
-    setIsDone(task.isDone);
-  }, [task.isDone]);
-
-  const handleCheckChange = () => {
-    setIsDone((prevState) => !prevState);
+export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
+  const handleCheckChange = (taskID: string) => {
+    toggleTaskState(taskID);
   };
+
   const handleRemoveTask = (taskID: string) => {
     removeTask(taskID);
   };
+
   return (
     <div
       className={`${styles.todoItem} ${
-        isDone ? styles.checkboxChecked : styles.checkboxDefault
+        task.isDone ? styles.checkboxChecked : styles.checkboxDefault
       }`}
     >
       <div className={`${styles.checkboxContainer}`}>
-        {isDone && <CheckCircle size={22} weight="fill" />}
-        {!isDone && <Circle size={22} weight="duotone" />}
-        <input checked={isDone} onChange={handleCheckChange} type="checkbox" />
+        {task.isDone && <CheckCircle size={22} weight="fill" />}
+        {!task.isDone && <Circle size={22} weight="duotone" />}
+        <input
+          checked={task.isDone}
+          onChange={() => handleCheckChange(task.id)}
+          type="checkbox"
+        />
       </div>
 
-      <a onClick={handleCheckChange}>{task.title}</a>
+      <a onClick={() => handleCheckChange(task.id)}>{task.title}</a>
 
       <button onClick={() => handleRemoveTask(task.id)} type="button">
         <Trash size={20} />
@@ -54,29 +55,31 @@ export function Task({ task, removeTask }: TaskProps) {
 }
 
 export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
-  const [isDone, setIsDone] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
 
   const handleSelectAllChange = () => {
-    setIsDone((prevState) => {
+    setIsSelected((prevState) => {
       return !prevState;
     });
-    selectAll(!isDone);
+    selectAll(!isSelected);
   };
+
   const handleRemoveAll = () => {
     removeAll();
   };
+
   return (
     <div
       className={`${styles.todoItem} ${styles.todoItemHeader} ${
-        isDone ? styles.checkboxChecked : styles.checkboxDefault
+        isSelected ? styles.checkboxChecked : styles.checkboxDefault
       }`}
     >
       <div className={`${styles.checkboxContainer}`}>
-        {isDone && <CheckCircle size={22} weight="fill" />}
-        {!isDone && <Circle size={22} weight="duotone" />}
+        {isSelected && <CheckCircle size={22} weight="fill" />}
+        {!isSelected && <Circle size={22} weight="duotone" />}
         <input
           title="Select All Tasks"
-          checked={isDone}
+          checked={isSelected}
           onChange={handleSelectAllChange}
           type="checkbox"
         />
