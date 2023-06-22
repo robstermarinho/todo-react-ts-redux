@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { ToastContainer, toast } from "react-toastify";
-
+import { AnimatePresence, Reorder } from "framer-motion";
 import { v4 as uid } from "uuid";
 import styles from "./App.module.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,29 +35,14 @@ function App() {
     return `${doneTasks.length} of ${numberOfTasks}`;
   }, [tasks]);
 
-  const renderTasks = () => {
-    if (tasks.length === 0) {
-      return <EmptyTask />;
+  const sortTasks = (taskA: TaskType, taskB: TaskType) => {
+    if (taskA.isDone && !taskB.isDone) {
+      return -1;
     }
-
-    let taskList = tasks.map((task) => (
-      <Task
-        key={task.id}
-        task={task}
-        removeTask={removeTask}
-        toggleTaskState={toggleTaskState}
-      />
-    ));
-
-    taskList.unshift(
-      <TasksHeader
-        key={"task-header"}
-        selectAll={setAllTasksisDoneWithState}
-        removeAll={removeAllTasks}
-      />
-    );
-
-    return taskList;
+    if (!taskA.isDone && taskB.isDone) {
+      return 1;
+    }
+    return 0;
   };
 
   const addTask = (title: string) => {
@@ -67,24 +52,56 @@ function App() {
       isDone: false,
     };
 
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setTasks((prevTasks) => {
+      return [...prevTasks, newTask].sort(sortTasks);
+    });
+
     toast.success("Task added successfully!");
   };
 
   const removeTask = (id: string) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== id).sort(sortTasks)
+    );
     toast.success("Task removed successfully!");
   };
 
   const toggleTaskState = (id: string) => {
     setTasks((prevTasks) => {
-      return prevTasks.map((task) => {
-        if (task.id === id) {
-          return { ...task, isDone: !task.isDone };
-        }
-        return task;
-      });
+      return prevTasks
+        .map((task) => {
+          if (task.id === id) {
+            return { ...task, isDone: !task.isDone };
+          }
+          return task;
+        })
+        .sort(sortTasks);
     });
+  };
+  const renderTasks = () => {
+    if (tasks.length == 0) {
+      return <EmptyTask />;
+    }
+
+    return (
+      <>
+        <TasksHeader
+          key={"task-header"}
+          selectAll={setAllTasksisDoneWithState}
+          removeAll={removeAllTasks}
+        />
+        {tasks.map((task) => (
+          <Reorder.Item key={task.id} value={task}>
+            <Task
+              key={task.id}
+              task={task}
+              removeTask={removeTask}
+              toggleTaskState={toggleTaskState}
+            />
+          </Reorder.Item>
+        ))}
+      </>
+    );
   };
 
   return (
@@ -97,7 +114,18 @@ function App() {
             <Info title="Tasks" amount={numberOfTasks} />
             <Info title="Done" amount={numberOfDoneTasks} purple />
           </div>
-          <div className={styles.todoListContainer}>{renderTasks()}</div>
+          <div className={styles.todoListContainer}>
+            <AnimatePresence>
+              <Reorder.Group
+                className={styles.taskGroup}
+                axis="y"
+                values={tasks}
+                onReorder={setTasks}
+              >
+                {renderTasks()}
+              </Reorder.Group>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
       <ToastContainer theme="dark" closeOnClick />

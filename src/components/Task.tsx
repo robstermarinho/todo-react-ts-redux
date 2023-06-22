@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./Task.module.css";
 import { Trash, CheckCircle, Circle } from "phosphor-react";
 import clipBoardIcon from "../assets/clipboard-icon.svg";
+import { motion } from "framer-motion";
 
 export interface TaskType {
   id: string;
@@ -30,7 +31,10 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: -100 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: -100 }}
       className={`${styles.todoItem} ${
         task.isDone ? styles.checkboxChecked : styles.checkboxDefault
       }`}
@@ -50,7 +54,7 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
       <button onClick={() => handleRemoveTask(task.id)} type="button">
         <Trash size={20} />
       </button>
-    </div>
+    </motion.div>
   );
 }
 
@@ -69,7 +73,10 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: -100 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: -100 }}
       className={`${styles.todoItem} ${styles.todoItemHeader} ${
         isSelected ? styles.checkboxChecked : styles.checkboxDefault
       }`}
@@ -88,18 +95,23 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
       <button title="Remove All Tasks" onClick={handleRemoveAll} type="button">
         <Trash size={20} />
       </button>
-    </div>
+    </motion.div>
   );
 }
 
 export function EmptyTask() {
   return (
-    <div className={styles.emptyTask}>
+    <motion.div
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      className={styles.emptyTask}
+    >
       <div className={styles.emptyTaskContent}>
         <img src={clipBoardIcon} alt="Clipboard icon" />
         <h3>You don't have any tasks registered yet</h3>
         <p>Create tasks and organize your to-do items.</p>
       </div>
-    </div>
+    </motion.div>
   );
 }
