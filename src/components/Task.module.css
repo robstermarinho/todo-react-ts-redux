@@ -12,6 +12,10 @@
   border-radius: 8px;
 }
 
+.todoItem > small {
+    color: var(--gray-300);
+}
+
 .todoItem > a {
   flex: 1;
   cursor: pointer;
@@ -88,6 +92,9 @@
 .checkboxChecked > a {
   text-decoration: line-through;
   color: var(--gray-300);
+}
+.checkboxChecked > small {
+    color: var(--purple-dark);
 }
 
 .checkboxChecked > a:hover {

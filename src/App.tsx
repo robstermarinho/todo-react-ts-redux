@@ -9,12 +9,12 @@ import { FormInput } from "./components/FormInput";
 import { Info } from "./components/Info";
 import { Task, EmptyTask, TasksHeader } from "./components/Task";
 import { TaskType } from "./components/Task";
-
-// Initial tasks
-const initialTasks: TaskType[] = [];
+import { storeInStorage, getFromStorage } from "./helper/storage";
 
 function App() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<TaskType[]>(
+    getFromStorage({ key: "tasks" }) || []
+  );
 
   const setAllTasksisDoneWithState = (state: boolean) => {
     setTasks((prevTasks) => {
@@ -50,34 +50,49 @@ function App() {
       id: uid(),
       title,
       isDone: false,
+      date: new Date(),
     };
 
     setTasks((prevTasks) => {
-      return [...prevTasks, newTask].sort(sortTasks);
+      const finalResult = [...prevTasks, newTask].sort(sortTasks);
+
+      storeInStorage({ key: "tasks", value: finalResult });
+
+      return finalResult;
     });
 
     toast.success("Task added successfully!");
   };
 
   const removeTask = (id: string) => {
-    setTasks((prevTasks) =>
-      prevTasks.filter((task) => task.id !== id).sort(sortTasks)
-    );
+    setTasks((prevTasks) => {
+      const finalResult = prevTasks
+        .filter((task) => task.id !== id)
+        .sort(sortTasks);
+
+      storeInStorage({ key: "tasks", value: finalResult });
+
+      return finalResult;
+    });
     toast.success("Task removed successfully!");
   };
 
   const toggleTaskState = (id: string) => {
     setTasks((prevTasks) => {
-      return prevTasks
+      const finalResult = prevTasks
         .map((task) => {
           if (task.id === id) {
-            return { ...task, isDone: !task.isDone };
+            return { ...task, isDone: !task.isDone, date: new Date() };
           }
           return task;
         })
         .sort(sortTasks);
+
+      storeInStorage({ key: "tasks", value: finalResult });
+      return finalResult;
     });
   };
+
   const renderTasks = () => {
     if (tasks.length == 0) {
       return <EmptyTask />;

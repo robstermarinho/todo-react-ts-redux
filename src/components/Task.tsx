@@ -8,6 +8,7 @@ export interface TaskType {
   id: string;
   title: string;
   isDone: boolean;
+  date: Date;
 }
 
 interface TaskProps {
@@ -66,7 +67,7 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
       </div>
 
       <a onClick={() => handleCheckChange(task.id)}>{task.title}</a>
-
+      <small>{new Date(task.date).toLocaleDateString()} {new Date(task.date).toLocaleTimeString()}</small>
       <DeleteTaskDialog
         onSuccess={() => handleRemoveTask(task.id)}
         title="Remove Task"
