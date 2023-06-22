@@ -3,7 +3,7 @@ import styles from "./Task.module.css";
 import { Trash, CheckCircle, Circle } from "phosphor-react";
 import clipBoardIcon from "../assets/clipboard-icon.svg";
 import { motion } from "framer-motion";
-
+import { DeleteTaskDialog } from "./DeleteTaskDialog";
 export interface TaskType {
   id: string;
   title: string;
@@ -67,9 +67,10 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
 
       <a onClick={() => handleCheckChange(task.id)}>{task.title}</a>
 
-      <button onClick={() => handleRemoveTask(task.id)} type="button">
-        <Trash size={20} />
-      </button>
+      <DeleteTaskDialog
+        onSuccess={() => handleRemoveTask(task.id)}
+        taskName={task.title}
+      />
     </motion.div>
   );
 }
