@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { AnimatePresence, Reorder } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { v4 as uid } from "uuid";
 import styles from "./App.module.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,10 +37,10 @@ function App() {
 
   const sortTasks = (taskA: TaskType, taskB: TaskType) => {
     if (taskA.isDone && !taskB.isDone) {
-      return -1;
+      return 1;
     }
     if (!taskA.isDone && taskB.isDone) {
-      return 1;
+      return -1;
     }
     return 0;
   };
@@ -84,23 +84,21 @@ function App() {
     }
 
     return (
-      <>
+      <AnimatePresence>
         <TasksHeader
           key={"task-header"}
           selectAll={setAllTasksisDoneWithState}
           removeAll={removeAllTasks}
         />
         {tasks.map((task) => (
-          <Reorder.Item key={task.id} value={task}>
-            <Task
-              key={task.id}
-              task={task}
-              removeTask={removeTask}
-              toggleTaskState={toggleTaskState}
-            />
-          </Reorder.Item>
+          <Task
+            key={task.id}
+            task={task}
+            removeTask={removeTask}
+            toggleTaskState={toggleTaskState}
+          />
         ))}
-      </>
+      </AnimatePresence>
     );
   };
 
@@ -114,18 +112,7 @@ function App() {
             <Info title="Tasks" amount={numberOfTasks} />
             <Info title="Done" amount={numberOfDoneTasks} purple />
           </div>
-          <div className={styles.todoListContainer}>
-            <AnimatePresence>
-              <Reorder.Group
-                className={styles.taskGroup}
-                axis="y"
-                values={tasks}
-                onReorder={setTasks}
-              >
-                {renderTasks()}
-              </Reorder.Group>
-            </AnimatePresence>
-          </div>
+          <div className={styles.todoListContainer}>{renderTasks()}</div>
         </div>
       </div>
       <ToastContainer theme="dark" closeOnClick />

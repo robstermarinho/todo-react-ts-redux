@@ -20,6 +20,20 @@ interface TasksHeaderProps {
   selectAll: (nextState: boolean) => void;
   removeAll: () => void;
 }
+const motionVariants = {
+  initial: {
+    opacity: 0,
+    translateY: -100,
+  },
+  animate: {
+    opacity: 1,
+    translateY: 0,
+    transition: {
+      duration: 0.2,
+    },
+  },
+  exit: { opacity: 0, translateX: -100 },
+};
 
 export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
   const handleCheckChange = (taskID: string) => {
@@ -32,9 +46,11 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -100 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, x: -100 }}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      layout
+      variants={motionVariants}
       className={`${styles.todoItem} ${
         task.isDone ? styles.checkboxChecked : styles.checkboxDefault
       }`}
@@ -74,9 +90,11 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -100 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, x: -100 }}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      layout
+      variants={motionVariants}
       className={`${styles.todoItem} ${styles.todoItemHeader} ${
         isSelected ? styles.checkboxChecked : styles.checkboxDefault
       }`}
