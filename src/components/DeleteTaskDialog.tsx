@@ -1,13 +1,13 @@
-import { useState } from "react";
-import styles from "./DeleteTaskDialog.module.css";
-import { Trash } from "phosphor-react";
+import { useState } from 'react'
+import styles from './DeleteTaskDialog.module.css'
+import { Trash } from 'phosphor-react'
 interface DeleteTaskDialogProps {
-  onSuccess: () => void;
-  title: string;
-  targetName?: string;
-  question: string;
-  cancel_text?: string;
-  confirm_text?: string;
+  onSuccess: () => void
+  title: string
+  targetName?: string
+  question: string
+  cancelText?: string
+  confirmText?: string
 }
 
 export function DeleteTaskDialog({
@@ -15,18 +15,18 @@ export function DeleteTaskDialog({
   title,
   targetName,
   question,
-  cancel_text,
-  confirm_text,
+  cancelText = 'Cancel',
+  confirmText = 'Confirm',
 }: DeleteTaskDialogProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   function toggleModal() {
-    setIsOpen((prevState) => !prevState);
+    setIsOpen((prevState) => !prevState)
   }
 
   function confirmAction() {
-    onSuccess();
-    toggleModal();
+    onSuccess()
+    toggleModal()
   }
   return (
     <>
@@ -41,15 +41,15 @@ export function DeleteTaskDialog({
             <p>{question}</p>
             <div className={styles.buttonsContainer}>
               <button onClick={toggleModal} className={styles.modalCancel}>
-                {cancel_text ? cancel_text : "Cancel"}
+                {cancelText || 'Cancel'}
               </button>
               <button onClick={confirmAction} className={styles.modalConfirm}>
-                {confirm_text ? confirm_text : "Confirm"}
+                {confirmText || 'Confirm'}
               </button>
             </div>
           </div>
         </div>
       )}
     </>
-  );
+  )
 }

@@ -4,6 +4,7 @@ import { CheckCircle, Circle } from 'phosphor-react'
 import clipBoardIcon from '../assets/clipboard-icon.svg'
 import { motion } from 'framer-motion'
 import { DeleteTaskDialog } from './DeleteTaskDialog'
+import { motionVariants } from '../helper/variants'
 
 export interface TaskType {
   id: string
@@ -21,20 +22,6 @@ interface TaskProps {
 interface TasksHeaderProps {
   selectAll: (nextState: boolean) => void
   removeAll: () => void
-}
-const motionVariants = {
-  initial: {
-    opacity: 0,
-    translateY: -100,
-  },
-  animate: {
-    opacity: 1,
-    translateY: 0,
-    transition: {
-      duration: 0.2,
-    },
-  },
-  exit: { opacity: 0, translateX: -100 },
 }
 
 export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
@@ -77,7 +64,7 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
         title="Remove Task"
         question="Are you sure you want to remove this task?"
         targetName={task.title}
-        confirm_text="Remove Task"
+        confirmText="Remove Task"
       />
     </motion.div>
   )
@@ -123,7 +110,7 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
         onSuccess={handleRemoveAll}
         title="Remove All Tasks"
         question="Are you sure you want to remove all tasks?"
-        confirm_text="Remove All"
+        confirmText="Remove All"
       />
     </motion.div>
   )

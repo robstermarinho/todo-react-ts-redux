@@ -1,19 +1,12 @@
 import { useState } from 'react'
 import { FormInput } from '../../components/FormInput'
-import { EmptyTask, TaskType } from '../../components/Task'
+import { EmptyTask } from '../../components/Task'
 import { HomePageContainer } from './styles'
 import { v4 as uid } from 'uuid'
 import { toast } from 'react-toastify'
 import { storeInStorage, getFromStorage } from '../../helper/storage'
 import { AnimatePresence } from 'framer-motion'
-
-interface TodoProps {
-  id: string
-  title: string
-  slug: string
-  date: Date
-  tasks: TaskType[]
-}
+import { Todo, TodoProps } from '../../components/Todo'
 
 function slugify(str = '') {
   str = str.replace(/^\s+|\s+$/g, '')
@@ -62,7 +55,7 @@ export function HomePage() {
     return (
       <AnimatePresence>
         {todos.map((todo) => {
-          return <h1 key={todo.slug}>{todo.slug}</h1>
+          return <Todo todo={todo} key={todo.id} />
         })}
       </AnimatePresence>
     )

@@ -23,7 +23,7 @@ export const HomePageContainer = styled.div`
       align-items: flex-end;
       flex-direction: column;
       width: 100%;
-
+      margin-bottom: 1rem;
       a {
         display: flex;
         cursor: pointer;
@@ -40,6 +40,7 @@ export const HomePageContainer = styled.div`
       flex-direction: column;
       align-items: center;
       gap: 0.75rem;
+
     }
   }
 `
