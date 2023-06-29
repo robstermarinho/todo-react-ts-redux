@@ -1,25 +1,26 @@
-import { useState } from "react";
-import styles from "./Task.module.css";
-import { Trash, CheckCircle, Circle } from "phosphor-react";
-import clipBoardIcon from "../assets/clipboard-icon.svg";
-import { motion } from "framer-motion";
-import { DeleteTaskDialog } from "./DeleteTaskDialog";
+import { useState } from 'react'
+import styles from './Task.module.css'
+import { CheckCircle, Circle } from 'phosphor-react'
+import clipBoardIcon from '../assets/clipboard-icon.svg'
+import { motion } from 'framer-motion'
+import { DeleteTaskDialog } from './DeleteTaskDialog'
+
 export interface TaskType {
-  id: string;
-  title: string;
-  isDone: boolean;
-  date: Date;
+  id: string
+  title: string
+  isDone: boolean
+  date: Date
 }
 
 interface TaskProps {
-  task: TaskType;
-  removeTask: (id: string) => void;
-  toggleTaskState: (id: string) => void;
+  task: TaskType
+  removeTask: (id: string) => void
+  toggleTaskState: (id: string) => void
 }
 
 interface TasksHeaderProps {
-  selectAll: (nextState: boolean) => void;
-  removeAll: () => void;
+  selectAll: (nextState: boolean) => void
+  removeAll: () => void
 }
 const motionVariants = {
   initial: {
@@ -34,16 +35,16 @@ const motionVariants = {
     },
   },
   exit: { opacity: 0, translateX: -100 },
-};
+}
 
 export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
   const handleCheckChange = (taskID: string) => {
-    toggleTaskState(taskID);
-  };
+    toggleTaskState(taskID)
+  }
 
   const handleRemoveTask = (taskID: string) => {
-    removeTask(taskID);
-  };
+    removeTask(taskID)
+  }
 
   return (
     <motion.div
@@ -67,7 +68,10 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
       </div>
 
       <a onClick={() => handleCheckChange(task.id)}>{task.title}</a>
-      <small>{new Date(task.date).toLocaleDateString()} {new Date(task.date).toLocaleTimeString()}</small>
+      <small>
+        {new Date(task.date).toLocaleDateString()}{' '}
+        {new Date(task.date).toLocaleTimeString()}
+      </small>
       <DeleteTaskDialog
         onSuccess={() => handleRemoveTask(task.id)}
         title="Remove Task"
@@ -76,22 +80,22 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
         confirm_text="Remove Task"
       />
     </motion.div>
-  );
+  )
 }
 
 export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
-  const [isSelected, setIsSelected] = useState(false);
+  const [isSelected, setIsSelected] = useState(false)
 
   const handleSelectAllChange = () => {
     setIsSelected((prevState) => {
-      return !prevState;
-    });
-    selectAll(!isSelected);
-  };
+      return !prevState
+    })
+    selectAll(!isSelected)
+  }
 
   const handleRemoveAll = () => {
-    removeAll();
-  };
+    removeAll()
+  }
 
   return (
     <motion.div
@@ -122,7 +126,7 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
         confirm_text="Remove All"
       />
     </motion.div>
-  );
+  )
 }
 
 export function EmptyTask() {
@@ -139,5 +143,5 @@ export function EmptyTask() {
         <p>Create tasks and organize your to-do items.</p>
       </div>
     </motion.div>
-  );
+  )
 }
