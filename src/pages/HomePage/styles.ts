@@ -24,12 +24,25 @@ export const HomePageContainer = styled.div`
       flex-direction: column;
       width: 100%;
       margin-bottom: 1rem;
+
       a {
         display: flex;
-        cursor: pointer;
+        justify-content: flex-start;
+        align-items: center;
+        text-decoration: none;
+        gap: 0.2rem;
+        padding: 10px 0px;
+        color: var(--gray-300);
+        border-radius: 8px;
         transition: color 0.2s ease-in-out;
+        cursor: pointer;
+
         &:hover {
           color: var(--blue);
+        }
+        svg {
+          line-height: 0;
+          padding: 0;
         }
       }
     }

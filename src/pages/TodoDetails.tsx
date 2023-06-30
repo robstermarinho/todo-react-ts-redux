@@ -8,9 +8,9 @@ import { FormInput } from '../components/FormInput'
 import { Info } from '../components/Info'
 import { Task, EmptyTask, TasksHeader, TaskType } from '../components/Task'
 import { storeInStorage, getFromStorage } from '../helper/storage'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { TodoProps } from '../components/Todo'
-
+import { ArrowCircleLeft } from 'phosphor-react'
 export function TodoDetails() {
   const params = useParams()
   const slug = params.slug || ''
@@ -48,7 +48,9 @@ export function TodoDetails() {
 
   const setAllTasksisDoneWithState = (state: boolean) => {
     setTasks((prevTasks) => {
-      return prevTasks.map((task) => ({ ...task, isDone: state }))
+      const newTasks = prevTasks.map((task) => ({ ...task, isDone: state }))
+      storeInStorage({ key: storageKey, value: newTasks })
+      return newTasks
     })
   }
 
@@ -64,7 +66,7 @@ export function TodoDetails() {
   const numberOfDoneTasks = useMemo((): string => {
     const doneTasks = tasks.filter((task) => task.isDone)
     updateNumberOfTodoTasksInStorage(slug, tasks.length, doneTasks.length)
-    return `${doneTasks.length} of ${tasks.length}`
+    return `${doneTasks.length}`
   }, [tasks, slug])
 
   const sortTasks = (taskA: TaskType, taskB: TaskType) => {
@@ -152,11 +154,17 @@ export function TodoDetails() {
   return (
     <div className={styles.body}>
       <div className={styles.container}>
-        <h3>{todo.title}</h3>
         <FormInput placeholder="Add new task" addAction={addTask} />
+        <h3>{todo.title}</h3>
         <div className={styles.todoHeaderContainer}>
-          <Info title="Tasks" amount={numberOfTasks} />
-          <Info title="Done" amount={numberOfDoneTasks} purple />
+          <Link to={`/`} className={styles.backLink}>
+            <ArrowCircleLeft />
+            <span>Back </span>
+          </Link>
+          <div className={styles.infoContainer}>
+            <Info title="Tasks" amount={numberOfTasks} />
+            <Info title="Done" amount={numberOfDoneTasks} purple />
+          </div>
         </div>
         <div className={styles.todoListContainer}>{renderTasks()}</div>
       </div>

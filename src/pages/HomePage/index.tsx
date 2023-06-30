@@ -11,7 +11,7 @@ import {
 } from '../../helper/storage'
 import { AnimatePresence } from 'framer-motion'
 import { Todo, TodoProps } from '../../components/Todo'
-
+import { Trash } from 'phosphor-react'
 function slugify(str = '') {
   str = str.replace(/^\s+|\s+$/g, '')
   str = str.toLowerCase()
@@ -80,7 +80,12 @@ export function HomePage() {
       <div className="content">
         <FormInput placeholder="Add new todo list" addAction={addtodo} />
         <div className="header-container">
-          {todos.length > 0 && <a onClick={removeAllTodos}>Remove all</a>}
+          {todos.length > 0 && (
+            <a onClick={removeAllTodos}>
+              <Trash />
+              <span> Remove all</span>
+            </a>
+          )}
         </div>
         <div className="list-container">{renderTodos()}</div>
       </div>

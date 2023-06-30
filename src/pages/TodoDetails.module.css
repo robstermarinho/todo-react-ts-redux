@@ -18,8 +18,29 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  margin-top: 4rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.body .container .todoHeaderContainer a.backLink {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.2rem;
+  padding: 10px 0px;
+  color: var(--gray-300);
+  border-radius: 8px;
+  transition: color 0.2s ease-in-out;
+
+  cursor: pointer;
+}
+.body .container .todoHeaderContainer .infoContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.body .container .todoHeaderContainer a.backLink:hover {
+  color: var(--blue);
 }
 .body .container .todoListContainer {
   display: flex;
