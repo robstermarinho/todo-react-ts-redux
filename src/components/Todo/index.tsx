@@ -15,9 +15,10 @@ export interface TodoProps {
 
 interface TodoDataProps {
   todo: TodoProps
+  removeTodo: (id: string) => void
 }
 
-export function Todo({ todo }: TodoDataProps) {
+export function Todo({ todo, removeTodo }: TodoDataProps) {
   return (
     <TodoContainer
       initial="initial"
@@ -43,7 +44,7 @@ export function Todo({ todo }: TodoDataProps) {
       </Link>
 
       <DeleteTaskDialog
-        onSuccess={() => alert(todo.id)}
+        onSuccess={() => removeTodo(todo.id)}
         title="Remove Todo"
         question="Are you sure you want to remove this todo list?"
         targetName={todo.title}

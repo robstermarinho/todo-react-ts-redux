@@ -25,7 +25,7 @@
   color: var(--gray-200);
 }
 
-.todoItem button {
+.todoItem > button {
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -33,13 +33,13 @@
   border-radius: 2px;
   padding: 2px;
 }
-.todoItem button:hover {
+.todoItem > button:hover {
   background-color: var(--gray-400);
 }
-.todoItem button svg {
+.todoItem > button svg {
   color: var(--gray-300);
 }
-.todoItem button:hover svg {
+.todoItem > button:hover svg {
   color: var(--danger);
 }
 

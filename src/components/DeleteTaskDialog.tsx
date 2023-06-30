@@ -8,6 +8,7 @@ interface DeleteTaskDialogProps {
   question: string
   cancelText?: string
   confirmText?: string
+  buttonLabel?: string
 }
 
 export function DeleteTaskDialog({
@@ -17,6 +18,7 @@ export function DeleteTaskDialog({
   question,
   cancelText = 'Cancel',
   confirmText = 'Confirm',
+  buttonLabel = '',
 }: DeleteTaskDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -30,8 +32,9 @@ export function DeleteTaskDialog({
   }
   return (
     <>
-      <button onClick={() => toggleModal()}>
-        <Trash size={20} />
+      <button className="dialog-remove-button" onClick={() => toggleModal()}>
+        <Trash size={20} />{' '}
+        {buttonLabel.length > 0 && <span>{buttonLabel}</span>}
       </button>
       {isOpen && (
         <div className={styles.container}>

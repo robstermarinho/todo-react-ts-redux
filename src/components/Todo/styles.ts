@@ -65,21 +65,22 @@ export const TodoContainer = styled(motion.div)`
     background-color: var(--gray-600);
   }
 
-  button {
+  > button {
     border: none;
     background-color: transparent;
     cursor: pointer;
     line-height: 0;
     border-radius: 2px;
     padding: 2px;
-  }
-  button:hover {
-    background-color: var(--gray-400);
-  }
-  button svg {
-    color: var(--gray-300);
-  }
-  button:hover svg {
-    color: var(--danger);
+    &:hover {
+      background-color: var(--gray-400);
+
+      svg {
+        color: var(--danger);
+      }
+    }
+    svg {
+      color: var(--gray-300);
+    }
   }
 `

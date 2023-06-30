@@ -12,6 +12,7 @@ import {
 import { AnimatePresence } from 'framer-motion'
 import { Todo, TodoProps } from '../../components/Todo'
 import { Trash } from 'phosphor-react'
+import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
 function slugify(str = '') {
   str = str.replace(/^\s+|\s+$/g, '')
   str = str.toLowerCase()
@@ -60,11 +61,24 @@ export function HomePage() {
     return (
       <AnimatePresence>
         {todos.map((todo) => {
-          return <Todo todo={todo} key={todo.id} />
+          return <Todo removeTodo={removeTodo} todo={todo} key={todo.id} />
         })}
       </AnimatePresence>
     )
   }
+
+  const removeTodo = (id: string) => {
+    // clear todo tasks from storage
+    const todo = todos.find((todo) => todo.id === id)
+    if (todo) {
+      clearKeyFromStorage({ key: `${todo.slug}/tasks` })
+    }
+
+    const newTodos = todos.filter((todoItem) => todoItem.id !== id)
+    setTodos(newTodos)
+    storeInStorage({ key: 'todos', value: newTodos })
+  }
+
   const removeAllTodos = () => {
     // Clear all todo tasks from storage
     todos.forEach((todo) => {
@@ -81,10 +95,12 @@ export function HomePage() {
         <FormInput placeholder="Add new todo list" addAction={addtodo} />
         <div className="header-container">
           {todos.length > 0 && (
-            <a onClick={removeAllTodos}>
-              <Trash />
-              <span> Remove all</span>
-            </a>
+            <DeleteTaskDialog
+              title="Remove all todo lists"
+              question="Are you sure you want to remove all todo lists?"
+              onSuccess={removeAllTodos}
+              buttonLabel="Remove all"
+            />
           )}
         </div>
         <div className="list-container">{renderTodos()}</div>

@@ -25,7 +25,9 @@ export const HomePageContainer = styled.div`
       width: 100%;
       margin-bottom: 1rem;
 
-      a {
+      > button {
+        border: none;
+        background-color: transparent;
         display: flex;
         justify-content: flex-start;
         align-items: center;
