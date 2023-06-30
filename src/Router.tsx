@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { TodoDetails } from './pages/TodoDetails'
 import { DefaultLayout } from './layouts/DefaultLayout'
 import { HomePage } from './pages/HomePage'
+
 export function Router() {
   return (
     <Routes>
