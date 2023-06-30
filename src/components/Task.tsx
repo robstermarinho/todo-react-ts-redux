@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './Task.module.css'
 import { CheckCircle, Circle } from 'phosphor-react'
-import clipBoardIcon from '../assets/clipboard-icon.svg'
+
 import { motion } from 'framer-motion'
 import { DeleteTaskDialog } from './DeleteTaskDialog'
 import { motionVariants } from '../helper/variants'
@@ -112,23 +112,6 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
         question="Are you sure you want to remove all tasks?"
         confirmText="Remove All"
       />
-    </motion.div>
-  )
-}
-
-export function EmptyTask() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, x: 100 }}
-      className={styles.emptyTask}
-    >
-      <div className={styles.emptyTaskContent}>
-        <img src={clipBoardIcon} alt="Clipboard icon" />
-        <h3>You don't have any tasks registered yet</h3>
-        <p>Create tasks and organize your to-do items.</p>
-      </div>
     </motion.div>
   )
 }

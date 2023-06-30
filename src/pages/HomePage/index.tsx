@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { FormInput } from '../../components/FormInput'
-import { EmptyTask } from '../../components/Task'
 import { HomePageContainer } from './styles'
 import { v4 as uid } from 'uuid'
 import { toast } from 'react-toastify'
@@ -11,8 +10,8 @@ import {
 } from '../../helper/storage'
 import { AnimatePresence } from 'framer-motion'
 import { Todo, TodoProps } from '../../components/Todo'
-import { Trash } from 'phosphor-react'
 import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
+import { EmptyContainer } from '../../components/EmptyContainer'
 function slugify(str = '') {
   str = str.replace(/^\s+|\s+$/g, '')
   str = str.toLowerCase()
@@ -56,7 +55,12 @@ export function HomePage() {
 
   const renderTodos = () => {
     if (todos.length === 0) {
-      return <EmptyTask />
+      return (
+        <EmptyContainer
+          title="No todo list yet"
+          subTitle="Create yor first todo list."
+        />
+      )
     }
     return (
       <AnimatePresence>

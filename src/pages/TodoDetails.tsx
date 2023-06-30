@@ -6,11 +6,12 @@ import styles from './TodoDetails.module.css'
 
 import { FormInput } from '../components/FormInput'
 import { Info } from '../components/Info'
-import { Task, EmptyTask, TasksHeader, TaskType } from '../components/Task'
+import { Task, TasksHeader, TaskType } from '../components/Task'
 import { storeInStorage, getFromStorage } from '../helper/storage'
 import { Link, useParams } from 'react-router-dom'
 import { TodoProps } from '../components/Todo'
 import { ArrowCircleLeft } from 'phosphor-react'
+import { EmptyContainer } from '../components/EmptyContainer'
 export function TodoDetails() {
   const params = useParams()
   const slug = params.slug || ''
@@ -129,7 +130,12 @@ export function TodoDetails() {
 
   const renderTasks = () => {
     if (tasks.length === 0) {
-      return <EmptyTask />
+      return (
+        <EmptyContainer
+          title="You do not have any tasks registered yet"
+          subTitle="Create tasks and organize your to-do items."
+        />
+      )
     }
 
     return (
