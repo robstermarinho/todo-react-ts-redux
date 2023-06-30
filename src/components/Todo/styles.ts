@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 
 export const TodoContainer = styled(motion.div)`
   width: 100%;
+
   display: flex;
   align-items: center;
   flex-direction: row;

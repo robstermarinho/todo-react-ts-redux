@@ -40,7 +40,6 @@ export const HomePageContainer = styled.div`
       flex-direction: column;
       align-items: center;
       gap: 0.75rem;
-
     }
   }
 `

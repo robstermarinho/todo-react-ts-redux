@@ -21,3 +21,11 @@ export function getFromStorage({ key }: Omit<StorageProps, 'value'>) {
   }
   return null
 }
+
+export function clearKeyFromStorage({ key }: Omit<StorageProps, 'value'>) {
+  try {
+    localStorage.removeItem(key)
+  } catch (error) {
+    console.log(`Error clearing ${key} from localStorage`, error)
+  }
+}

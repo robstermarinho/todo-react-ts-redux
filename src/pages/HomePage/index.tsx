@@ -4,7 +4,11 @@ import { EmptyTask } from '../../components/Task'
 import { HomePageContainer } from './styles'
 import { v4 as uid } from 'uuid'
 import { toast } from 'react-toastify'
-import { storeInStorage, getFromStorage } from '../../helper/storage'
+import {
+  storeInStorage,
+  getFromStorage,
+  clearKeyFromStorage,
+} from '../../helper/storage'
 import { AnimatePresence } from 'framer-motion'
 import { Todo, TodoProps } from '../../components/Todo'
 
@@ -31,7 +35,8 @@ export function HomePage() {
       title,
       slug: slugify(title),
       date: new Date(),
-      tasks: [],
+      numberOftasks: 0,
+      numberOfDoneTasks: 0,
     }
 
     const slugExists = todos.find((todo) => todo.slug === newTodo.slug)
@@ -61,6 +66,11 @@ export function HomePage() {
     )
   }
   const removeAllTodos = () => {
+    // Clear all todo tasks from storage
+    todos.forEach((todo) => {
+      const storageKey = `${todo.slug}/tasks`
+      clearKeyFromStorage({ key: storageKey })
+    })
     setTodos([])
     storeInStorage({ key: 'todos', value: [] })
   }

@@ -9,18 +9,42 @@ import { Info } from '../components/Info'
 import { Task, EmptyTask, TasksHeader, TaskType } from '../components/Task'
 import { storeInStorage, getFromStorage } from '../helper/storage'
 import { useParams } from 'react-router-dom'
+import { TodoProps } from '../components/Todo'
 
 export function TodoDetails() {
   const params = useParams()
   const slug = params.slug || ''
-  console.log('slug', slug)
   const storageKey = `${slug}/tasks`
 
+  const getTodoInfoFromStorage = (slug: string) => {
+    const todos = getFromStorage({ key: 'todos' }) || []
+    const todo = todos.find((todo: TodoProps) => todo.slug === slug)
+    return todo
+  }
+
+  const updateNumberOfTodoTasksInStorage = (
+    slug: string,
+    numberOftasks: number,
+    numberOfDoneTasks: number,
+  ) => {
+    const todos = getFromStorage({ key: 'todos' }) || []
+    const newTodos = todos.map((todo: TodoProps) => {
+      if (todo.slug === slug) {
+        return {
+          ...todo,
+          numberOftasks,
+          numberOfDoneTasks,
+        }
+      }
+      return todo
+    })
+    storeInStorage({ key: 'todos', value: newTodos })
+  }
+
+  const [todo] = useState(getTodoInfoFromStorage(slug))
   const [tasks, setTasks] = useState<TaskType[]>(
     getFromStorage({ key: storageKey }) || [],
   )
-
-  const todoTitle = ''
 
   const setAllTasksisDoneWithState = (state: boolean) => {
     setTasks((prevTasks) => {
@@ -39,8 +63,9 @@ export function TodoDetails() {
 
   const numberOfDoneTasks = useMemo((): string => {
     const doneTasks = tasks.filter((task) => task.isDone)
-    return `${doneTasks.length} of ${numberOfTasks}`
-  }, [tasks, numberOfTasks])
+    updateNumberOfTodoTasksInStorage(slug, tasks.length, doneTasks.length)
+    return `${doneTasks.length} of ${tasks.length}`
+  }, [tasks, slug])
 
   const sortTasks = (taskA: TaskType, taskB: TaskType) => {
     if (taskA.isDone && !taskB.isDone) {
@@ -127,7 +152,7 @@ export function TodoDetails() {
   return (
     <div className={styles.body}>
       <div className={styles.container}>
-        <h3>{todoTitle}</h3>
+        <h3>{todo.title}</h3>
         <FormInput placeholder="Add new task" addAction={addTask} />
         <div className={styles.todoHeaderContainer}>
           <Info title="Tasks" amount={numberOfTasks} />
