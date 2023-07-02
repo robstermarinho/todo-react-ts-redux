@@ -1,3 +1,4 @@
+import { TaskType } from '../components/Task'
 import { TodoProps } from '../components/Todo'
 
 interface StorageProps {
@@ -37,6 +38,15 @@ export function getAllTodosFromStorage() {
   return todos
 }
 
+export function updateTodosInStorage(todos: TodoProps[]): TodoProps[] {
+  storeInStorage({ key: 'todos', value: todos })
+  return todos
+}
+
+export function removeAllTodosFromStorage() {
+  storeInStorage({ key: 'todos', value: [] })
+}
+
 export function getTodoInfoFromStorage(slug: string) {
   const todos = getAllTodosFromStorage()
   const todo = todos.find((todo: TodoProps) => todo.slug === slug)
@@ -60,4 +70,27 @@ export function updateNumberOfTodoTasksInStorage(
     return todo
   })
   storeInStorage({ key: 'todos', value: newTodos })
+}
+
+/**  TASKS
+ */
+export function removeAllTodoTasksfromStorage(id: string) {
+  const todos = getAllTodosFromStorage()
+  const todo = todos.find((todoItem: TodoProps) => todoItem.id === id)
+  if (!todo) return
+  removeAllTasksfromStorage(todo.slug)
+}
+
+export function removeAllTasksfromStorage(slug: string) {
+  clearKeyFromStorage({ key: `${slug}/tasks` })
+}
+
+export function getAllTodoTasksFromStorage(slug: string) {
+  const tasks = getFromStorage({ key: `${slug}/tasks` }) || []
+  return tasks
+}
+
+export function updateTodoTasksInStorage(slug: string, tasks: TaskType[]) {
+  storeInStorage({ key: `${slug}/tasks`, value: tasks })
+  return tasks
 }

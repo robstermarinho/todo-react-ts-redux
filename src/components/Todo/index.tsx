@@ -3,6 +3,7 @@ import { TodoContainer } from './styles'
 import { DeleteTaskDialog } from '../DeleteTaskDialog'
 import { Link } from 'react-router-dom'
 import { motionVariants } from '../../helper/variants'
+import { Info } from '../Info'
 
 export interface TodoProps {
   id: string
@@ -19,6 +20,8 @@ interface TodoDataProps {
 }
 
 export function Todo({ todo, removeTodo }: TodoDataProps) {
+  const isClompleted: boolean =
+    todo.numberOfDoneTasks === todo.numberOftasks && todo.numberOftasks > 0
   return (
     <TodoContainer
       initial="initial"
@@ -32,9 +35,14 @@ export function Todo({ todo, removeTodo }: TodoDataProps) {
 
         <div className="todo-info">
           <h4>{todo.title}</h4>
-          <h5>
-            Done {todo.numberOfDoneTasks} of {todo.numberOftasks}
-          </h5>
+
+          <div className="todo-info-small">
+            <Info
+              title={isClompleted ? 'Completed' : 'In progress'}
+              amount={`${todo.numberOfDoneTasks} of ${todo.numberOftasks}`}
+              purple={isClompleted}
+            />
+          </div>
 
           <small>
             {new Date(todo.date).toLocaleDateString()}{' '}

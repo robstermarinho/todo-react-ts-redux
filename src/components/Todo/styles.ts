@@ -42,6 +42,9 @@ export const TodoContainer = styled(motion.div)`
       small {
         font-size: 0.6rem;
       }
+      .todo-info-small {
+        display: flex;
+      }
     }
     svg {
       color: var(--blue);

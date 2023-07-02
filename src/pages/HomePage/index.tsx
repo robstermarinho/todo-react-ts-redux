@@ -1,21 +1,28 @@
-import { useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { FormInput } from '../../components/FormInput'
 import { HomePageContainer } from './styles'
 import { v4 as uid } from 'uuid'
 import { toast } from 'react-toastify'
 import {
-  storeInStorage,
-  clearKeyFromStorage,
   getAllTodosFromStorage,
+  removeAllTodoTasksfromStorage,
+  updateTodosInStorage,
+  removeAllTodosFromStorage,
 } from '../../helper/storage'
 import { AnimatePresence } from 'framer-motion'
 import { Todo, TodoProps } from '../../components/Todo'
 import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
 import { EmptyContainer } from '../../components/EmptyContainer'
 import { slugify } from '../../helper/util'
+import { AppInfoContext } from '../../helper/context'
 
 export function HomePage() {
   const [todos, setTodos] = useState<TodoProps[]>(getAllTodosFromStorage())
+  const { updateAppTotals } = useContext(AppInfoContext)
+
+  // useEffect(() => {
+  //   updateAppTotals()
+  // }, [])
 
   const addtodo = (title: string) => {
     const newTodo: TodoProps = {
@@ -35,12 +42,31 @@ export function HomePage() {
     }
 
     setTodos((prevTodos) => {
-      const finalResult = [...prevTodos, newTodo]
-      storeInStorage({ key: 'todos', value: finalResult })
-      return finalResult
+      const data = [...prevTodos, newTodo]
+      updateTodosInStorage(data)
+      updateAppTotals()
+      return data
     })
   }
 
+  const removeTodo = (id: string) => {
+    setTodos((prevTodos) => {
+      const newTodos = prevTodos.filter((todoItem) => todoItem.id !== id)
+      updateTodosInStorage(newTodos)
+      removeAllTodoTasksfromStorage(id)
+      updateAppTotals()
+      return newTodos
+    })
+  }
+
+  const removeAllTodos = () => {
+    todos.forEach((todo) => {
+      removeAllTodoTasksfromStorage(todo.id)
+    })
+    setTodos([])
+    removeAllTodosFromStorage()
+    updateAppTotals()
+  }
   const renderTodos = () => {
     if (todos.length === 0) {
       return (
@@ -57,28 +83,6 @@ export function HomePage() {
         })}
       </AnimatePresence>
     )
-  }
-
-  const removeTodo = (id: string) => {
-    // clear todo tasks from storage
-    const todo = todos.find((todo) => todo.id === id)
-    if (todo) {
-      clearKeyFromStorage({ key: `${todo.slug}/tasks` })
-    }
-
-    const newTodos = todos.filter((todoItem) => todoItem.id !== id)
-    setTodos(newTodos)
-    storeInStorage({ key: 'todos', value: newTodos })
-  }
-
-  const removeAllTodos = () => {
-    // Clear all todo tasks from storage
-    todos.forEach((todo) => {
-      const storageKey = `${todo.slug}/tasks`
-      clearKeyFromStorage({ key: storageKey })
-    })
-    setTodos([])
-    storeInStorage({ key: 'todos', value: [] })
   }
 
   return (

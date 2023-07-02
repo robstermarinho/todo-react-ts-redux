@@ -1,8 +1,8 @@
 .todoHeader .blue {
-  color: var(--blue);
+  color: var(--blue) !important;
 }
 .todoHeader .purple {
-  color: var(--purple);
+  color: var(--purple) !important;
 }
 
 .todoHeader {
