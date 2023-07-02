@@ -5,29 +5,17 @@ import { v4 as uid } from 'uuid'
 import { toast } from 'react-toastify'
 import {
   storeInStorage,
-  getFromStorage,
   clearKeyFromStorage,
+  getAllTodosFromStorage,
 } from '../../helper/storage'
 import { AnimatePresence } from 'framer-motion'
 import { Todo, TodoProps } from '../../components/Todo'
 import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
 import { EmptyContainer } from '../../components/EmptyContainer'
-function slugify(str = '') {
-  str = str.replace(/^\s+|\s+$/g, '')
-  str = str.toLowerCase()
-  str = str
-    .replace(/[^a-z0-9 -]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-  return str
-}
+import { slugify } from '../../helper/util'
 
 export function HomePage() {
-  const [todos, setTodos] = useState<TodoProps[]>(
-    getFromStorage({
-      key: 'todos',
-    }) || [],
-  )
+  const [todos, setTodos] = useState<TodoProps[]>(getAllTodosFromStorage())
 
   const addtodo = (title: string) => {
     const newTodo: TodoProps = {

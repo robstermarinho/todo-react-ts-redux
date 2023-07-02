@@ -7,40 +7,20 @@ import styles from './TodoDetails.module.css'
 import { FormInput } from '../components/FormInput'
 import { Info } from '../components/Info'
 import { Task, TasksHeader, TaskType } from '../components/Task'
-import { storeInStorage, getFromStorage } from '../helper/storage'
+import {
+  storeInStorage,
+  getFromStorage,
+  getTodoInfoFromStorage,
+  updateNumberOfTodoTasksInStorage,
+} from '../helper/storage'
 import { Link, useParams } from 'react-router-dom'
-import { TodoProps } from '../components/Todo'
+
 import { ArrowCircleLeft } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
 export function TodoDetails() {
   const params = useParams()
   const slug = params.slug || ''
   const storageKey = `${slug}/tasks`
-
-  const getTodoInfoFromStorage = (slug: string) => {
-    const todos = getFromStorage({ key: 'todos' }) || []
-    const todo = todos.find((todo: TodoProps) => todo.slug === slug)
-    return todo
-  }
-
-  const updateNumberOfTodoTasksInStorage = (
-    slug: string,
-    numberOftasks: number,
-    numberOfDoneTasks: number,
-  ) => {
-    const todos = getFromStorage({ key: 'todos' }) || []
-    const newTodos = todos.map((todo: TodoProps) => {
-      if (todo.slug === slug) {
-        return {
-          ...todo,
-          numberOftasks,
-          numberOfDoneTasks,
-        }
-      }
-      return todo
-    })
-    storeInStorage({ key: 'todos', value: newTodos })
-  }
 
   const [todo] = useState(getTodoInfoFromStorage(slug))
   const [tasks, setTasks] = useState<TaskType[]>(
