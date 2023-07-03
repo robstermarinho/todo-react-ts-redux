@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext } from 'react'
+import { useState, useMemo, useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { AnimatePresence } from 'framer-motion'
 import { v4 as uid } from 'uuid'
@@ -6,6 +6,8 @@ import styles from './TodoDetails.module.css'
 import { FormInput } from '../components/FormInput'
 import { Info } from '../components/Info'
 import { Task, TasksHeader, TaskType } from '../components/Task'
+import { useNavigate, useParams } from 'react-router-dom'
+
 import {
   getTodoInfoFromStorage,
   updateNumberOfTodoTasksInStorage,
@@ -13,19 +15,24 @@ import {
   updateTodoTasksInStorage,
   removeAllTasksfromStorage,
 } from '../helper/storage'
-import { Link, useParams } from 'react-router-dom'
 import { ArrowCircleLeft } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
 import { AppInfoContext } from '../helper/context'
 
 export function TodoDetails() {
+  const navigate = useNavigate()
   const params = useParams()
   const slug = params.slug || ''
   const [todo] = useState(getTodoInfoFromStorage(slug))
   const [tasks, setTasks] = useState<TaskType[]>(
     getAllTodoTasksFromStorage(slug),
   )
-  // const { updateAppTotals } = useContext(AppInfoContext)
+  const { updateAppTotals } = useContext(AppInfoContext)
+
+  useEffect(() => {
+    updateAppTotals()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks])
 
   const addTask = (title: string) => {
     const newTask: TaskType = {
@@ -41,8 +48,6 @@ export function TodoDetails() {
 
       return data
     })
-
-    toast.success('Task added successfully!')
   }
 
   const removeTask = (id: string) => {
@@ -55,6 +60,7 @@ export function TodoDetails() {
 
       return newTasks
     })
+    toast.success('Task removed successfully!')
   }
 
   const removeAllTasks = () => {
@@ -78,6 +84,7 @@ export function TodoDetails() {
   const numberOfDoneTasks = useMemo((): string => {
     const doneTasks = tasks.filter((task) => task.isDone)
     updateNumberOfTodoTasksInStorage(slug, tasks.length, doneTasks.length)
+
     return `${doneTasks.length}`
   }, [tasks, slug])
 
@@ -143,10 +150,16 @@ export function TodoDetails() {
         <FormInput placeholder="Add new task" addAction={addTask} />
         <h3>{todo.title}</h3>
         <div className={styles.todoHeaderContainer}>
-          <Link to={`/`} className={styles.backLink}>
+          <a
+            onClick={() => {
+              navigate('/')
+              updateAppTotals()
+            }}
+            className={styles.backLink}
+          >
             <ArrowCircleLeft />
             <span>Back </span>
-          </Link>
+          </a>
           <div className={styles.infoContainer}>
             <Info title="Tasks" amount={numberOfTasks} />
             <Info title="Done" amount={numberOfDoneTasks} purple />

@@ -33,6 +33,7 @@ export function clearKeyFromStorage({ key }: Omit<StorageProps, 'value'>) {
   }
 }
 
+/**  TODOS */
 export function getAllTodosFromStorage() {
   const todos = getFromStorage({ key: 'todos' }) || []
   return todos
@@ -72,8 +73,7 @@ export function updateNumberOfTodoTasksInStorage(
   storeInStorage({ key: 'todos', value: newTodos })
 }
 
-/**  TASKS
- */
+/**  TASKS */
 export function removeAllTodoTasksfromStorage(id: string) {
   const todos = getAllTodosFromStorage()
   const todo = todos.find((todoItem: TodoProps) => todoItem.id === id)
@@ -93,4 +93,42 @@ export function getAllTodoTasksFromStorage(slug: string) {
 export function updateTodoTasksInStorage(slug: string, tasks: TaskType[]) {
   storeInStorage({ key: `${slug}/tasks`, value: tasks })
   return tasks
+}
+
+export function getAppTotalsFromStorage() {
+  const todos = getAllTodosFromStorage()
+
+  const totalOfCompletedTodoLists = todos.reduce(
+    (current: number, todo: TodoProps) => {
+      if (
+        todo.numberOfDoneTasks === todo.numberOftasks &&
+        todo.numberOfDoneTasks > 0
+      ) {
+        return current + 1
+      }
+      return current
+    },
+    0,
+  )
+
+  const totalNumberOfTasks = todos.reduce(
+    (current: number, todo: TodoProps) => {
+      return current + todo.numberOftasks
+    },
+    0,
+  )
+
+  const totalNumberOfCompletedTasks = todos.reduce(
+    (current: number, todo: TodoProps) => {
+      return current + todo.numberOfDoneTasks
+    },
+    0,
+  )
+
+  return {
+    total: todos.length,
+    totalCompleted: totalOfCompletedTodoLists,
+    totalTasks: totalNumberOfTasks,
+    totalTasksCompleted: totalNumberOfCompletedTasks,
+  }
 }

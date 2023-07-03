@@ -20,9 +20,10 @@ export function HomePage() {
   const [todos, setTodos] = useState<TodoProps[]>(getAllTodosFromStorage())
   const { updateAppTotals } = useContext(AppInfoContext)
 
-  // useEffect(() => {
-  //   updateAppTotals()
-  // }, [])
+  useEffect(() => {
+    updateAppTotals()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [todos])
 
   const addtodo = (title: string) => {
     const newTodo: TodoProps = {
@@ -44,7 +45,7 @@ export function HomePage() {
     setTodos((prevTodos) => {
       const data = [...prevTodos, newTodo]
       updateTodosInStorage(data)
-      updateAppTotals()
+
       return data
     })
   }
@@ -54,7 +55,7 @@ export function HomePage() {
       const newTodos = prevTodos.filter((todoItem) => todoItem.id !== id)
       updateTodosInStorage(newTodos)
       removeAllTodoTasksfromStorage(id)
-      updateAppTotals()
+
       return newTodos
     })
   }
@@ -65,7 +66,6 @@ export function HomePage() {
     })
     setTodos([])
     removeAllTodosFromStorage()
-    updateAppTotals()
   }
   const renderTodos = () => {
     if (todos.length === 0) {
