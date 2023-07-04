@@ -22,8 +22,7 @@ export function HomePage() {
 
   useEffect(() => {
     updateAppTotals()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [todos])
+  }, [todos, updateAppTotals])
 
   const addtodo = (title: string) => {
     const newTodo: TodoProps = {

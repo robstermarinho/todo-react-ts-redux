@@ -31,8 +31,7 @@ export function TodoDetails() {
 
   useEffect(() => {
     updateAppTotals()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tasks])
+  }, [tasks, updateAppTotals])
 
   const addTask = (title: string) => {
     const newTask: TaskType = {
@@ -153,7 +152,6 @@ export function TodoDetails() {
           <a
             onClick={() => {
               navigate('/')
-              updateAppTotals()
             }}
             className={styles.backLink}
           >
