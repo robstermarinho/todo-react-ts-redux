@@ -1,5 +1,5 @@
 import { TaskType } from '../components/Task'
-import { TodoProps } from '../components/Todo'
+import { TodoType } from '../components/Todo'
 
 interface StorageProps {
   key: string
@@ -39,7 +39,7 @@ export function getAllTodosFromStorage() {
   return todos
 }
 
-export function updateTodosInStorage(todos: TodoProps[]): TodoProps[] {
+export function updateTodosInStorage(todos: TodoType[]): TodoType[] {
   storeInStorage({ key: 'todos', value: todos })
   return todos
 }
@@ -50,7 +50,7 @@ export function removeAllTodosFromStorage() {
 
 export function getTodoInfoFromStorage(slug: string) {
   const todos = getAllTodosFromStorage()
-  const todo = todos.find((todo: TodoProps) => todo.slug === slug)
+  const todo = todos.find((todo: TodoType) => todo.slug === slug)
   return todo
 }
 
@@ -60,7 +60,7 @@ export function updateNumberOfTodoTasksInStorage(
   numberOfDoneTasks: number,
 ) {
   const todos = getAllTodosFromStorage()
-  const newTodos = todos.map((todo: TodoProps) => {
+  const newTodos = todos.map((todo: TodoType) => {
     if (todo.slug === slug) {
       return {
         ...todo,
@@ -76,7 +76,7 @@ export function updateNumberOfTodoTasksInStorage(
 /**  TASKS */
 export function removeAllTodoTasksfromStorage(id: string) {
   const todos = getAllTodosFromStorage()
-  const todo = todos.find((todoItem: TodoProps) => todoItem.id === id)
+  const todo = todos.find((todoItem: TodoType) => todoItem.id === id)
   if (!todo) return
   removeAllTasksfromStorage(todo.slug)
 }
@@ -93,42 +93,4 @@ export function getAllTodoTasksFromStorage(slug: string) {
 export function updateTodoTasksInStorage(slug: string, tasks: TaskType[]) {
   storeInStorage({ key: `${slug}/tasks`, value: tasks })
   return tasks
-}
-
-export function getAppTotalsFromStorage() {
-  const todos = getAllTodosFromStorage()
-
-  const totalOfCompletedTodoLists = todos.reduce(
-    (current: number, todo: TodoProps) => {
-      if (
-        todo.numberOfDoneTasks === todo.numberOftasks &&
-        todo.numberOfDoneTasks > 0
-      ) {
-        return current + 1
-      }
-      return current
-    },
-    0,
-  )
-
-  const totalNumberOfTasks = todos.reduce(
-    (current: number, todo: TodoProps) => {
-      return current + todo.numberOftasks
-    },
-    0,
-  )
-
-  const totalNumberOfCompletedTasks = todos.reduce(
-    (current: number, todo: TodoProps) => {
-      return current + todo.numberOfDoneTasks
-    },
-    0,
-  )
-
-  return {
-    total: todos.length,
-    totalCompleted: totalOfCompletedTodoLists,
-    totalTasks: totalNumberOfTasks,
-    totalTasksCompleted: totalNumberOfCompletedTasks,
-  }
 }

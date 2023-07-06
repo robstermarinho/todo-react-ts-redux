@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import styles from './Task.module.css'
 import { CheckCircle, Circle } from 'phosphor-react'
-
 import { motion } from 'framer-motion'
 import { DeleteTaskDialog } from './DeleteTaskDialog'
 import { motionVariants } from '../helper/variants'
-
+import { formatDistanceToNow } from 'date-fns'
 export interface TaskType {
   id: string
   title: string
@@ -56,8 +55,7 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
 
       <a onClick={() => handleCheckChange(task.id)}>{task.title}</a>
       <small>
-        {new Date(task.date).toLocaleDateString()}{' '}
-        {new Date(task.date).toLocaleTimeString()}
+        {formatDistanceToNow(new Date(task.date), { addSuffix: true })}
       </small>
       <DeleteTaskDialog
         onSuccess={() => handleRemoveTask(task.id)}

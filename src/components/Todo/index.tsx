@@ -4,24 +4,27 @@ import { DeleteTaskDialog } from '../DeleteTaskDialog'
 import { Link } from 'react-router-dom'
 import { motionVariants } from '../../helper/variants'
 import { Info } from '../Info'
-
-export interface TodoProps {
+import { formatDistanceToNow } from 'date-fns'
+import { TaskType } from '../Task'
+export interface TodoType {
   id: string
   title: string
   slug: string
   date: Date
-  numberOftasks: number
-  numberOfDoneTasks: number
+  tasks: TaskType[]
 }
 
-interface TodoDataProps {
-  todo: TodoProps
+interface TodoProps {
+  todo: TodoType
   removeTodo: (id: string) => void
 }
 
-export function Todo({ todo, removeTodo }: TodoDataProps) {
+export function Todo({ todo, removeTodo }: TodoProps) {
+  const numberOfTasks = todo.tasks.length
+  const numberOfDoneTasks = todo.tasks.filter((task) => task.isDone).length
   const isClompleted: boolean =
-    todo.numberOfDoneTasks === todo.numberOftasks && todo.numberOftasks > 0
+    numberOfDoneTasks === numberOfTasks && numberOfDoneTasks > 0
+
   return (
     <TodoContainer
       initial="initial"
@@ -39,14 +42,13 @@ export function Todo({ todo, removeTodo }: TodoDataProps) {
           <div className="todo-info-small">
             <Info
               title={isClompleted ? 'Completed' : 'In progress'}
-              amount={`${todo.numberOfDoneTasks} of ${todo.numberOftasks}`}
+              amount={`${numberOfDoneTasks} of ${numberOfTasks}`}
               purple={isClompleted}
             />
           </div>
 
           <small>
-            {new Date(todo.date).toLocaleDateString()}{' '}
-            {new Date(todo.date).toLocaleTimeString()}{' '}
+            {formatDistanceToNow(new Date(todo.date), { addSuffix: true })}
           </small>
         </div>
       </Link>

@@ -1,71 +1,28 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext } from 'react'
 import { FormInput } from '../../components/FormInput'
 import { HomePageContainer } from './styles'
-import { v4 as uid } from 'uuid'
-import { toast } from 'react-toastify'
-import {
-  getAllTodosFromStorage,
-  removeAllTodoTasksfromStorage,
-  updateTodosInStorage,
-  removeAllTodosFromStorage,
-} from '../../helper/storage'
 import { AnimatePresence } from 'framer-motion'
-import { Todo, TodoProps } from '../../components/Todo'
+import { Todo } from '../../components/Todo'
 import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
 import { EmptyContainer } from '../../components/EmptyContainer'
-import { slugify } from '../../helper/util'
 import { AppInfoContext } from '../../helper/context'
 
 export function HomePage() {
-  const [todos, setTodos] = useState<TodoProps[]>(getAllTodosFromStorage())
-  const { updateAppTotals } = useContext(AppInfoContext)
+  const { todos, addTodo, removeTodoById, removeAllTheTodos } =
+    useContext(AppInfoContext)
 
-  useEffect(() => {
-    updateAppTotals()
-  }, [todos, updateAppTotals])
-
-  const addtodo = (title: string) => {
-    const newTodo: TodoProps = {
-      id: uid(),
-      title,
-      slug: slugify(title),
-      date: new Date(),
-      numberOftasks: 0,
-      numberOfDoneTasks: 0,
-    }
-
-    const slugExists = todos.find((todo) => todo.slug === newTodo.slug)
-
-    if (slugExists) {
-      toast.error('This todo title has already been used.')
-      return
-    }
-
-    setTodos((prevTodos) => {
-      const data = [...prevTodos, newTodo]
-      updateTodosInStorage(data)
-
-      return data
-    })
+  const handleAddTodo = (title: string) => {
+    addTodo(title)
   }
 
-  const removeTodo = (id: string) => {
-    setTodos((prevTodos) => {
-      const newTodos = prevTodos.filter((todoItem) => todoItem.id !== id)
-      updateTodosInStorage(newTodos)
-      removeAllTodoTasksfromStorage(id)
-
-      return newTodos
-    })
+  const handleRemoveTodo = (todoId: string) => {
+    removeTodoById(todoId)
   }
 
-  const removeAllTodos = () => {
-    todos.forEach((todo) => {
-      removeAllTodoTasksfromStorage(todo.id)
-    })
-    setTodos([])
-    removeAllTodosFromStorage()
+  const handleRemoveAllTodos = () => {
+    removeAllTheTodos()
   }
+
   const renderTodos = () => {
     if (todos.length === 0) {
       return (
@@ -78,7 +35,9 @@ export function HomePage() {
     return (
       <AnimatePresence>
         {todos.map((todo) => {
-          return <Todo removeTodo={removeTodo} todo={todo} key={todo.id} />
+          return (
+            <Todo removeTodo={handleRemoveTodo} todo={todo} key={todo.id} />
+          )
         })}
       </AnimatePresence>
     )
@@ -87,13 +46,13 @@ export function HomePage() {
   return (
     <HomePageContainer>
       <div className="content">
-        <FormInput placeholder="Add new todo list" addAction={addtodo} />
+        <FormInput placeholder="Add new todo list" addAction={handleAddTodo} />
         <div className="header-container">
           {todos.length > 0 && (
             <DeleteTaskDialog
               title="Remove all todo lists"
               question="Are you sure you want to remove all todo lists?"
-              onSuccess={removeAllTodos}
+              onSuccess={handleRemoveAllTodos}
               buttonLabel="Remove all"
             />
           )}

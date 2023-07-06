@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext, useEffect } from 'react'
+import { useState, useMemo, useContext } from 'react'
 import { toast } from 'react-toastify'
 import { AnimatePresence } from 'framer-motion'
 import { v4 as uid } from 'uuid'
@@ -8,30 +8,26 @@ import { Info } from '../components/Info'
 import { Task, TasksHeader, TaskType } from '../components/Task'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import {
-  getTodoInfoFromStorage,
-  updateNumberOfTodoTasksInStorage,
-  getAllTodoTasksFromStorage,
-  updateTodoTasksInStorage,
-  removeAllTasksfromStorage,
-} from '../helper/storage'
 import { ArrowCircleLeft } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
 import { AppInfoContext } from '../helper/context'
 
 export function TodoDetails() {
+  const {
+    findTodoBySlug,
+    getTodoTasksBySlug,
+    addTodoTask,
+    removeTodoTask,
+    removeAllTodoTasks,
+    toggleTodoTaskState,
+    toggleAllTodoTasksState,
+  } = useContext(AppInfoContext)
+
   const navigate = useNavigate()
   const params = useParams()
   const slug = params.slug || ''
-  const [todo] = useState(getTodoInfoFromStorage(slug))
-  const [tasks, setTasks] = useState<TaskType[]>(
-    getAllTodoTasksFromStorage(slug),
-  )
-  const { updateAppTotals } = useContext(AppInfoContext)
-
-  useEffect(() => {
-    updateAppTotals()
-  }, [tasks, updateAppTotals])
+  const [todo] = useState(findTodoBySlug(slug))
+  const [tasks, setTasks] = useState<TaskType[]>(getTodoTasksBySlug(slug))
 
   const addTask = (title: string) => {
     const newTask: TaskType = {
@@ -41,39 +37,70 @@ export function TodoDetails() {
       date: new Date(),
     }
 
-    setTasks((prevTasks) => {
-      const data = [...prevTasks, newTask].sort(sortTasks)
-      updateTodoTasksInStorage(slug, data)
-
-      return data
-    })
-  }
-
-  const removeTask = (id: string) => {
-    setTasks((prevTasks) => {
-      const newTasks = prevTasks
-        .filter((task) => task.id !== id)
-        .sort(sortTasks)
-
-      updateTodoTasksInStorage(slug, newTasks)
-
+    setTasks((previousTasks) => {
+      const newTasks = [...previousTasks, newTask].sort(sortTasks)
       return newTasks
     })
+
+    addTodoTask(slug, newTask)
+    toast.success('Task added successfully!')
+  }
+
+  const removeTask = (taskId: string) => {
+    const foundTask = tasks.find((task) => task.id === taskId)
+
+    if (!foundTask) {
+      toast.error('Task not found!')
+      return
+    }
+
+    setTasks((previousTasks) => {
+      const newTasks = previousTasks
+        .filter((task) => task.id !== foundTask.id)
+        .sort(sortTasks)
+      return newTasks
+    })
+
+    removeTodoTask(slug, taskId)
     toast.success('Task removed successfully!')
   }
 
   const removeAllTasks = () => {
     setTasks([])
-    removeAllTasksfromStorage(slug)
+    removeAllTodoTasks(slug)
   }
 
-  const setAllTasksisDoneWithState = (state: boolean) => {
-    setTasks((prevTasks) => {
-      const newTasks = prevTasks.map((task) => ({ ...task, isDone: state }))
-      updateTodoTasksInStorage(slug, newTasks)
+  const toggleAllTasksState = (state: boolean) => {
+    setTasks((previousTasks) => {
+      const newTasks = previousTasks.map((task) => ({ ...task, isDone: state }))
 
       return newTasks
     })
+    toggleAllTodoTasksState(slug, state)
+  }
+
+  const toggleTaskState = (id: string) => {
+    const findTask = tasks.find((task) => task.id === id)
+    if (!findTask) {
+      toast.error('Task not found!')
+      return
+    }
+    const taskCurrentState = findTask.isDone
+
+    setTasks((previousTasks) => {
+      const newTasks = previousTasks
+        .map((task) => {
+          if (task.id === findTask.id) {
+            return { ...task, isDone: !taskCurrentState, date: new Date() }
+          }
+          return task
+        })
+        .sort(sortTasks)
+
+      return newTasks
+    })
+
+    toggleTodoTaskState(slug, findTask.id, !taskCurrentState)
   }
 
   const numberOfTasks = useMemo((): string => {
@@ -82,10 +109,8 @@ export function TodoDetails() {
 
   const numberOfDoneTasks = useMemo((): string => {
     const doneTasks = tasks.filter((task) => task.isDone)
-    updateNumberOfTodoTasksInStorage(slug, tasks.length, doneTasks.length)
-
     return `${doneTasks.length}`
-  }, [tasks, slug])
+  }, [tasks])
 
   const sortTasks = (taskA: TaskType, taskB: TaskType) => {
     if (taskA.isDone && !taskB.isDone) {
@@ -95,23 +120,6 @@ export function TodoDetails() {
       return -1
     }
     return 0
-  }
-
-  const toggleTaskState = (id: string) => {
-    setTasks((prevTasks) => {
-      const finalResult = prevTasks
-        .map((task) => {
-          if (task.id === id) {
-            return { ...task, isDone: !task.isDone, date: new Date() }
-          }
-          return task
-        })
-        .sort(sortTasks)
-
-      updateTodoTasksInStorage(slug, finalResult)
-
-      return finalResult
-    })
   }
 
   const renderTasks = () => {
@@ -128,7 +136,7 @@ export function TodoDetails() {
       <AnimatePresence>
         <TasksHeader
           key={'task-header'}
-          selectAll={setAllTasksisDoneWithState}
+          selectAll={toggleAllTasksState}
           removeAll={removeAllTasks}
         />
         {tasks.map((task) => (
@@ -147,7 +155,7 @@ export function TodoDetails() {
     <div className={styles.body}>
       <div className={styles.container}>
         <FormInput placeholder="Add new task" addAction={addTask} />
-        <h3>{todo.title}</h3>
+        {todo && <h3>{todo.title}</h3>}
         <div className={styles.todoHeaderContainer}>
           <a
             onClick={() => {
