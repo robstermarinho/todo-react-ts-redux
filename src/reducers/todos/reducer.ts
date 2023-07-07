@@ -1,6 +1,6 @@
 import { TaskType } from '../../components/Task'
 import { TodoType } from '../../components/Todo'
-import { slugify } from '../../helper/util'
+import { produce } from 'immer'
 import { TodoActionTypes } from './actions'
 import { v4 as uid } from 'uuid'
 export interface AppInfoProps {
@@ -86,36 +86,63 @@ export function todosReducer(state: TodosState, action: any) {
         date: new Date(),
         tasks: [],
       }
-      const newTodos = [...state.todos, newTodo]
-      const newInfo = recalculateTodosInfo(newTodos)
 
-      return {
-        ...state,
-        todos: newTodos,
-        info: {
-          ...state.info,
-          ...newInfo,
-        },
-      }
+      /*
+        Immutability way
+
+        const newInfo = recalculateTodosInfo(newTodos)
+        return {
+            ...state,
+            todos: [...state.todos, newTodo],
+            info: {
+            ...state.info,
+            ...newInfo,
+            },
+        }
+      */
+
+      // With Immer
+      return produce(state, (draft) => {
+        draft.todos.push(newTodo)
+        draft.info = recalculateTodosInfo(draft.todos)
+      })
     }
 
     case TodoActionTypes.REMOVE_TODO: {
-      const newTodos = state.todos.filter(
-        (todo: TodoType) => todo.id !== action.payload.todoId,
+      /*
+        Immutability way
+        const newTodos = state.todos.filter(
+            (todo: TodoType) => todo.id !== action.payload.todoId,
+        )
+        const newInfo = recalculateTodosInfo(newTodos)
+        return {
+            ...state,
+            todos: newTodos,
+            info: {
+            ...state.info,
+            ...newInfo,
+            },
+        }
+    */
+      // With Immer
+      const currenttodoIdIndex = state.todos.findIndex(
+        (todo: TodoType) => todo.id === action.payload.todoId,
       )
-      const newInfo = recalculateTodosInfo(newTodos)
 
-      return {
-        ...state,
-        todos: newTodos,
-        info: {
-          ...state.info,
-          ...newInfo,
-        },
+      if (currenttodoIdIndex < 0) {
+        return state
       }
+
+      return produce(state, (draft) => {
+        draft.todos.splice(currenttodoIdIndex, 1)
+        draft.info = recalculateTodosInfo(draft.todos)
+      })
     }
 
     case TodoActionTypes.REMOVE_ALL_TODOS: {
+      /*
+        Immutability way
+
       return {
         ...state,
         todos: [],
@@ -127,10 +154,24 @@ export function todosReducer(state: TodosState, action: any) {
           totalTasksCompleted: 0,
         },
       }
+      */
+
+      // With Immer
+      return produce(state, (draft) => {
+        draft.todos = []
+        draft.info = {
+          total: 0,
+          totalCompleted: 0,
+          totalTasks: 0,
+          totalTasksCompleted: 0,
+        }
+      })
     }
 
     case TodoActionTypes.ADD_TODO_TASK: {
       const { slug, task } = action.payload
+      /*
+        Immutability way
 
       const newTodos = state.todos.map((todo: TodoType) => {
         if (todo.slug === slug) {
@@ -153,10 +194,29 @@ export function todosReducer(state: TodosState, action: any) {
           ...newInfo,
         },
       }
+      */
+
+      // With Immer
+      return produce(state, (draft) => {
+        const currentTodoIndex = draft.todos.findIndex(
+          (todo: TodoType) => todo.slug === slug,
+        )
+
+        if (currentTodoIndex < 0) {
+          return state
+        }
+
+        draft.todos[currentTodoIndex].tasks.push(task)
+        draft.info = recalculateTodosInfo(draft.todos)
+      })
     }
 
     case TodoActionTypes.REMOVE_TODO_TASK: {
       const { slug, taskId } = action.payload
+
+      /*
+        Immutability way
+
       const newTodos = state.todos.map((todo: TodoType) => {
         if (todo.slug === slug) {
           const newTodoTasks = todo.tasks.filter(
@@ -180,10 +240,31 @@ export function todosReducer(state: TodosState, action: any) {
           ...newInfo,
         },
       }
+      */
+
+      // With Immer
+      return produce(state, (draft) => {
+        const currentTodoIndex = draft.todos.findIndex(
+          (todo: TodoType) => todo.slug === slug,
+        )
+        if (currentTodoIndex < 0) {
+          return state
+        }
+        const currentTaskIndex = draft.todos[currentTodoIndex].tasks.findIndex(
+          (task: TaskType) => task.id === taskId,
+        )
+        if (currentTaskIndex < 0) {
+          return state
+        }
+        draft.todos[currentTodoIndex].tasks.splice(currentTaskIndex, 1)
+        draft.info = recalculateTodosInfo(draft.todos)
+      })
     }
 
     case TodoActionTypes.REMOVE_ALL_TODO_TASKS: {
       const { slug } = action.payload
+      /* Immutability way
+
       const newTodos = state.todos.map((todo: TodoType) => {
         if (todo.slug === slug) {
           return {
@@ -202,10 +283,26 @@ export function todosReducer(state: TodosState, action: any) {
           ...newInfo,
         },
       }
+    */
+
+      // With Immer
+      return produce(state, (draft) => {
+        const currentTodoIndex = draft.todos.findIndex(
+          (todo: TodoType) => todo.slug === slug,
+        )
+        if (currentTodoIndex < 0) {
+          return state
+        }
+        draft.todos[currentTodoIndex].tasks = []
+        draft.info = recalculateTodosInfo(draft.todos)
+      })
     }
 
     case TodoActionTypes.TOGGLE_TODO_TASK_STATE: {
       const { slug, taskId, done } = action.payload
+
+      /* Immutability way
+
       const newTodos = state.todos.map((todo: TodoType) => {
         if (todo.slug === slug) {
           const newTodoTasks = todo.tasks.map((task: TaskType) => {
@@ -233,10 +330,32 @@ export function todosReducer(state: TodosState, action: any) {
           ...newInfo,
         },
       }
+      */
+
+      // With Immer
+      return produce(state, (draft) => {
+        const currentTodoIndex = draft.todos.findIndex(
+          (todo: TodoType) => todo.slug === slug,
+        )
+        if (currentTodoIndex < 0) {
+          return state
+        }
+        const currentTaskIndex = draft.todos[currentTodoIndex].tasks.findIndex(
+          (task: TaskType) => task.id === taskId,
+        )
+        if (currentTaskIndex < 0) {
+          return state
+        }
+        draft.todos[currentTodoIndex].tasks[currentTaskIndex].isDone = done
+        draft.info = recalculateTodosInfo(draft.todos)
+      })
     }
 
     case TodoActionTypes.TOGGLE_ALL_TODO_TASKS_STATE: {
       const { slug, done } = action.payload
+
+      /* Immutability way
+
       const newTodos = state.todos.map((todo: TodoType) => {
         if (todo.slug === slug) {
           const newTodoTasks = todo.tasks.map((task: TaskType) => {
@@ -261,6 +380,21 @@ export function todosReducer(state: TodosState, action: any) {
           ...newInfo,
         },
       }
+      */
+
+      // With Immer
+      return produce(state, (draft) => {
+        const currentTodoIndex = draft.todos.findIndex(
+          (todo: TodoType) => todo.slug === slug,
+        )
+        if (currentTodoIndex < 0) {
+          return state
+        }
+        draft.todos[currentTodoIndex].tasks.forEach((task: TaskType) => {
+          task.isDone = done
+        })
+        draft.info = recalculateTodosInfo(draft.todos)
+      })
     }
 
     default:
