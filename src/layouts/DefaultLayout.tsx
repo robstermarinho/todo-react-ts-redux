@@ -8,7 +8,7 @@ export function DefaultLayout() {
     <div>
       <Header />
       <Outlet />
-      <ToastContainer theme="dark" closeOnClick />
+      <ToastContainer theme="dark" closeOnClick position="top-left" />
     </div>
   )
 }

@@ -6,7 +6,7 @@ import styles from './TodoDetails.module.css'
 import { FormInput } from '../components/FormInput'
 import { Info } from '../components/Info'
 import { Task, TasksHeader, TaskType } from '../components/Task'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 
 import { ArrowCircleLeft } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
@@ -23,7 +23,6 @@ export function TodoDetails() {
     toggleAllTodoTasksState,
   } = useContext(AppInfoContext)
 
-  const navigate = useNavigate()
   const params = useParams()
   const slug = params.slug || ''
   const [todo] = useState(findTodoBySlug(slug))
@@ -157,15 +156,10 @@ export function TodoDetails() {
         <FormInput placeholder="Add new task" addAction={addTask} />
         {todo && <h3>{todo.title}</h3>}
         <div className={styles.todoHeaderContainer}>
-          <a
-            onClick={() => {
-              navigate('/')
-            }}
-            className={styles.backLink}
-          >
+          <NavLink to="/" className={styles.backLink}>
             <ArrowCircleLeft />
             <span>Back </span>
-          </a>
+          </NavLink>
           <div className={styles.infoContainer}>
             <Info title="Tasks" amount={numberOfTasks} />
             <Info title="Done" amount={numberOfDoneTasks} purple />

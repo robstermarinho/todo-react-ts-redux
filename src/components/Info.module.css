@@ -28,3 +28,8 @@
 .todoHeader > h5.done {
   color: var(--purple);
 }
+
+.todoHeader .numberHighlight{
+  background-color: var(--purple);
+  color: var(--gray-500);
+}
