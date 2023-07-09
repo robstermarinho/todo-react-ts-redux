@@ -5,14 +5,7 @@ import { Link } from 'react-router-dom'
 import { motionVariants } from '../../helper/variants'
 import { Info } from '../Info'
 import { formatDistanceToNow } from 'date-fns'
-import { TaskType } from '../Task'
-export interface TodoType {
-  id: string
-  title: string
-  slug: string
-  date: Date
-  tasks: TaskType[]
-}
+import { TodoType } from '../../@types/todo'
 
 interface TodoProps {
   todo: TodoType

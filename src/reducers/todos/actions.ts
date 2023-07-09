@@ -1,4 +1,4 @@
-import { TaskType } from '../../components/Task'
+import { TaskType } from '../../@types/todo'
 
 export enum TodoActionTypes {
   ADD_TODO = 'ADD_TODO',
@@ -10,12 +10,6 @@ export enum TodoActionTypes {
   REMOVE_ALL_TODO_TASKS = 'REMOVE_ALL_TODO_TASKS',
   TOGGLE_TODO_TASK_STATE = 'TOGGLE_TODO_TASK_STATE',
   TOGGLE_ALL_TODO_TASKS_STATE = 'TOGGLE_ALL_TODO_TASKS_STATE',
-}
-
-export interface updateTodoNumbersParams {
-  slug: string
-  previousTasks: TaskType[]
-  newTasks: TaskType[]
 }
 
 export function addTodoAction(title: string, slug: string) {

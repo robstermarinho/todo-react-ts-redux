@@ -5,12 +5,13 @@ import { v4 as uid } from 'uuid'
 import styles from './TodoDetails.module.css'
 import { FormInput } from '../components/FormInput'
 import { Info } from '../components/Info'
-import { Task, TasksHeader, TaskType } from '../components/Task'
+import { Task, TasksHeader } from '../components/Task'
 import { NavLink, useParams } from 'react-router-dom'
 
 import { ArrowCircleLeft } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
 import { AppInfoContext } from '../helper/context'
+import { TaskType } from '../@types/todo'
 
 export function TodoDetails() {
   const {

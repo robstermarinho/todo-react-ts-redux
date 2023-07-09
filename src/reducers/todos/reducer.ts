@@ -1,20 +1,7 @@
-import { TaskType } from '../../components/Task'
-import { TodoType } from '../../components/Todo'
 import { produce } from 'immer'
 import { TodoActionTypes } from './actions'
 import { v4 as uid } from 'uuid'
-export interface AppInfoProps {
-  total: number
-  totalCompleted: number
-  totalTasks: number
-  totalTasksCompleted: number
-}
-
-interface TodosState {
-  todos: TodoType[]
-  tasks: TaskType[]
-  info: AppInfoProps
-}
+import { TaskType, TodoType, TodosState } from '../../@types/todo'
 
 /**
  * Initial state for the todos reducer

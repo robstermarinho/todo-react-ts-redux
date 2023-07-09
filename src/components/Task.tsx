@@ -5,23 +5,7 @@ import { motion } from 'framer-motion'
 import { DeleteTaskDialog } from './DeleteTaskDialog'
 import { motionVariants } from '../helper/variants'
 import { formatDistanceToNow } from 'date-fns'
-export interface TaskType {
-  id: string
-  title: string
-  isDone: boolean
-  date: Date
-}
-
-interface TaskProps {
-  task: TaskType
-  removeTask: (id: string) => void
-  toggleTaskState: (id: string) => void
-}
-
-interface TasksHeaderProps {
-  selectAll: (nextState: boolean) => void
-  removeAll: () => void
-}
+import { TaskProps, TasksHeaderProps } from '../@types/todo'
 
 export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
   const handleCheckChange = (taskID: string) => {

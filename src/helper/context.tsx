@@ -4,7 +4,7 @@ import {
   todosReducer,
   todosReducerInitializer,
 } from '../reducers/todos/reducer'
-import { TodoType } from '../components/Todo'
+
 import { slugify } from './util'
 import {
   addTodoAction,
@@ -18,34 +18,11 @@ import {
 } from '../reducers/todos/actions'
 
 import { toast } from 'react-toastify'
-import { TaskType } from '../components/Task'
-
-export interface AppInfoProps {
-  total: number
-  totalCompleted: number
-  totalTasks: number
-  totalTasksCompleted: number
-}
-
-interface AppInfoContextType {
-  todos: TodoType[]
-  tasks: TaskType[]
-  info: AppInfoProps
-  addTodo: (title: string) => void
-  removeTodoById: (todoId: string) => void
-  removeAllTheTodos: () => void
-  addTodoTask: (slug: string, task: TaskType) => void
-  removeTodoTask: (slug: string, taskId: string) => void
-  toggleTodoTaskState: (slug: string, taskId: string, done: boolean) => void
-  toggleAllTodoTasksState: (slug: string, done: boolean) => void
-  removeAllTodoTasks: (slug: string) => void
-  findTodoBySlug: (slug: string) => TodoType | undefined
-  getTodoTasksBySlug: (slug: string) => TaskType[]
-}
-
-interface AppInfoContextProviderProps {
-  children: React.ReactNode
-}
+import {
+  AppInfoContextProviderProps,
+  AppInfoContextType,
+  TodoType,
+} from '../@types/todo'
 
 export const AppInfoContext = createContext({} as AppInfoContextType)
 
@@ -71,7 +48,7 @@ export function AppInfoContextProvider({
 
   const addTodo = (title: string) => {
     const slug = slugify(title)
-    const slugExists = todos.find((todo) => todo.slug === slug)
+    const slugExists = todos.find((todo: TodoType) => todo.slug === slug)
     if (slugExists) {
       toast.error('This todo title has already been used.')
       return
@@ -101,7 +78,7 @@ export function AppInfoContextProvider({
   }
 
   const findTodoBySlug = (slug: string) => {
-    return todos.find((todo) => todo.slug === slug)
+    return todos.find((todo: TodoType) => todo.slug === slug)
   }
 
   const getTodoTasksBySlug = (slug: string) => {

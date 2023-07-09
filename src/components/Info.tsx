@@ -4,7 +4,7 @@ interface InfoProps {
   title?: string
   amount: string
   purple?: boolean
-  numberHighlight: boolean
+  numberHighlight?: boolean
 }
 
 export function Info({
