@@ -32,7 +32,7 @@ export const todosReducerInitializer = (initialState: TodosState) => {
   return initialState
 }
 
-function recalculateTodosInfo(todos: TodoType[]) {
+export function recalculateTodosInfo(todos: TodoType[]) {
   const totalNumberOfTasks = todos.reduce(
     (acc: number, todo: TodoType) => acc + todo.tasks.length,
     0,

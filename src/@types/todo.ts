@@ -2,14 +2,14 @@ export interface TaskType {
   id: string
   title: string
   isDone: boolean
-  date: Date
+  date: number
 }
 
 export interface TodoType {
   id: string
   title: string
   slug: string
-  date: Date
+  date: number
   tasks: TaskType[]
 }
 

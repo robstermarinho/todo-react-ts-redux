@@ -4,7 +4,7 @@ import { DeleteTaskDialog } from '../DeleteTaskDialog'
 import { Link } from 'react-router-dom'
 import { motionVariants } from '../../helper/variants'
 import { Info } from '../Info'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, fromUnixTime } from 'date-fns'
 import { TodoType } from '../../@types/todo'
 
 interface TodoProps {
@@ -41,7 +41,7 @@ export function Todo({ todo, removeTodo }: TodoProps) {
           </div>
 
           <small>
-            {formatDistanceToNow(new Date(todo.date), { addSuffix: true })}
+            {formatDistanceToNow(fromUnixTime(todo.date), { addSuffix: true })}
           </small>
         </div>
       </Link>
