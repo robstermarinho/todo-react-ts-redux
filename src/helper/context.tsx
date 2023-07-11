@@ -21,6 +21,7 @@ import { toast } from 'react-toastify'
 import {
   AppInfoContextProviderProps,
   AppInfoContextType,
+  TaskType,
   TodoType,
 } from '../@types/todo'
 

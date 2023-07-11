@@ -1,12 +1,12 @@
 import styles from './Header.module.css'
 import todoLogo from '../assets/todo-logo.svg'
+import { AppInfoContext } from '../helper/context'
+import { useContext } from 'react'
 import { Info } from './Info'
 import { NavLink } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { TodosState } from '../@types/todo'
 
 export function Header() {
-  const info = useSelector((state: TodosState) => state.info)
+  const { info } = useContext(AppInfoContext)
 
   return (
     <header className={styles.header}>

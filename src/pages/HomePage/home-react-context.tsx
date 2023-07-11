@@ -1,45 +1,26 @@
+import { useContext } from 'react'
 import { FormInput } from '../../components/FormInput'
 import { HomePageContainer } from './styles'
 import { AnimatePresence } from 'framer-motion'
 import { Todo } from '../../components/Todo'
 import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
 import { EmptyContainer } from '../../components/EmptyContainer'
-import { TodoType, TodosState } from '../../@types/todo'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  addTodo,
-  removeTodo,
-  removeAllTodos,
-} from '../../redux/reducers/todoSlice'
-import { slugify } from '../../helper/util'
-import { toast } from 'react-toastify'
+import { AppInfoContext } from '../../helper/context'
 
 export function HomePage() {
-  const todos = useSelector((state: TodosState) => state.todos)
-  const dispatch = useDispatch()
+  const { todos, addTodo, removeTodoById, removeAllTheTodos } =
+    useContext(AppInfoContext)
 
   const handleAddTodo = (title: string) => {
-    const slug = slugify(title)
-
-    const slugExists = todos.find((todo: TodoType) => todo.slug === slug)
-
-    if (slugExists) {
-      toast.error('This todo title has already been used.')
-      return
-    }
-    dispatch(addTodo({ title, slug }))
+    addTodo(title)
   }
 
   const handleRemoveTodo = (todoId: string) => {
-    if (!todoId) {
-      toast.error('Todo not found!')
-      return
-    }
-    dispatch(removeTodo({ todoId }))
+    removeTodoById(todoId)
   }
 
   const handleRemoveAllTodos = () => {
-    dispatch(removeAllTodos())
+    removeAllTheTodos()
   }
 
   const renderTodos = () => {

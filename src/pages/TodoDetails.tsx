@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext } from 'react'
+import { useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { AnimatePresence } from 'framer-motion'
 import { v4 as uid } from 'uuid'
@@ -10,120 +10,123 @@ import { NavLink, useParams } from 'react-router-dom'
 
 import { ArrowCircleLeft } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
-import { AppInfoContext } from '../helper/context'
-import { TaskType } from '../@types/todo'
+import { TaskType, TodoType, TodosState } from '../@types/todo'
+import {
+  addTodoTask,
+  removeTodoTask,
+  toggleAllTodoTasks,
+  toggleTodoTask,
+} from '../redux/reducers/todoSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUnixTime } from 'date-fns'
 
 export function TodoDetails() {
-  const {
-    findTodoBySlug,
-    getTodoTasksBySlug,
-    addTodoTask,
-    removeTodoTask,
-    removeAllTodoTasks,
-    toggleTodoTaskState,
-    toggleAllTodoTasksState,
-  } = useContext(AppInfoContext)
-
   const params = useParams()
   const slug = params.slug || ''
-  const [todo] = useState(findTodoBySlug(slug))
-  const [tasks, setTasks] = useState<TaskType[]>(getTodoTasksBySlug(slug))
 
-  const addTask = (title: string) => {
+  const dispatch = useDispatch()
+
+  const todo = useSelector((state: TodosState) =>
+    state.todos.find((todo: TodoType) => todo.slug === slug),
+  )
+
+  const handleAddTask = (title: string) => {
     const newTask: TaskType = {
       id: uid(),
       title,
       isDone: false,
-      date: new Date(),
+      date: getUnixTime(new Date()),
     }
 
-    setTasks((previousTasks) => {
-      const newTasks = [...previousTasks, newTask].sort(sortTasks)
-      return newTasks
-    })
-
-    addTodoTask(slug, newTask)
+    dispatch(addTodoTask({ slug, task: newTask }))
     toast.success('Task added successfully!')
   }
 
-  const removeTask = (taskId: string) => {
-    const foundTask = tasks.find((task) => task.id === taskId)
-
-    if (!foundTask) {
-      toast.error('Task not found!')
+  const handleRemoveTask = (taskId: string) => {
+    if (!todo) {
+      toast.error('Todo not found!')
       return
     }
 
-    setTasks((previousTasks) => {
-      const newTasks = previousTasks
-        .filter((task) => task.id !== foundTask.id)
-        .sort(sortTasks)
-      return newTasks
-    })
+    const foundTask = todo.tasks.find((task) => task.id === taskId)
 
-    removeTodoTask(slug, taskId)
-    toast.success('Task removed successfully!')
+    if (!foundTask) {
+      toast.error('Task not found!')
+    }
+
+    dispatch(removeTodoTask({ slug, taskId }))
   }
 
-  const removeAllTasks = () => {
-    setTasks([])
-    removeAllTodoTasks(slug)
+  const handleRemoveAllTasks = () => {
+    dispatch(removeTodoTask({ slug }))
   }
 
-  const toggleAllTasksState = (state: boolean) => {
-    setTasks((previousTasks) => {
-      const newTasks = previousTasks.map((task) => ({ ...task, isDone: state }))
-
-      return newTasks
-    })
-    toggleAllTodoTasksState(slug, state)
+  const handleToggleAllTasksState = (state: boolean) => {
+    dispatch(toggleAllTodoTasks({ slug, done: state }))
   }
 
-  const toggleTaskState = (id: string) => {
-    const findTask = tasks.find((task) => task.id === id)
+  const toggleTaskState = (taskId: string) => {
+    if (!todo) {
+      toast.error('Todo not found!')
+      return
+    }
+
+    const findTask = todo.tasks.find((task) => task.id === taskId)
+
     if (!findTask) {
       toast.error('Task not found!')
       return
     }
+
     const taskCurrentState = findTask.isDone
 
-    setTasks((previousTasks) => {
-      const newTasks = previousTasks
-        .map((task) => {
-          if (task.id === findTask.id) {
-            return { ...task, isDone: !taskCurrentState, date: new Date() }
-          }
-          return task
-        })
-        .sort(sortTasks)
-
-      return newTasks
-    })
-
-    toggleTodoTaskState(slug, findTask.id, !taskCurrentState)
+    dispatch(toggleTodoTask({ slug, taskId, done: !taskCurrentState }))
   }
 
   const numberOfTasks = useMemo((): string => {
-    return `${tasks.length}`
-  }, [tasks])
+    if (!todo) {
+      return '0'
+    }
+
+    return `${todo.tasks.length}`
+  }, [todo])
 
   const numberOfDoneTasks = useMemo((): string => {
-    const doneTasks = tasks.filter((task) => task.isDone)
-    return `${doneTasks.length}`
-  }, [tasks])
+    if (!todo) {
+      return '0'
+    }
 
-  const sortTasks = (taskA: TaskType, taskB: TaskType) => {
-    if (taskA.isDone && !taskB.isDone) {
-      return 1
-    }
-    if (!taskA.isDone && taskB.isDone) {
-      return -1
-    }
-    return 0
-  }
+    const doneTasks = todo.tasks.filter((task) => task.isDone)
+
+    return `${doneTasks.length}`
+  }, [todo])
+
+  // const sortTasks = (taskA: TaskType, taskB: TaskType) => {
+  //   if (taskA.isDone && !taskB.isDone) {
+  //     return 1
+  //   }
+  //   if (!taskA.isDone && taskB.isDone) {
+  //     return -1
+  //   }
+  //   return 0
+  // }
 
   const renderTasks = () => {
-    if (tasks.length === 0) {
+    if (!todo) {
+      return (
+        <EmptyContainer
+          title="Todo not found"
+          subTitle="Go back to the home page and select a todo list."
+          button={
+            <NavLink to="/">
+              <ArrowCircleLeft />
+              <span>Home Page </span>
+            </NavLink>
+          }
+        />
+      )
+    }
+    if (!todo || todo.tasks.length === 0) {
       return (
         <EmptyContainer
           title="You do not have any tasks registered yet"
@@ -136,17 +139,18 @@ export function TodoDetails() {
       <AnimatePresence>
         <TasksHeader
           key={'task-header'}
-          selectAll={toggleAllTasksState}
-          removeAll={removeAllTasks}
+          selectAll={handleToggleAllTasksState}
+          removeAll={handleRemoveAllTasks}
         />
-        {tasks.map((task) => (
-          <Task
-            key={task.id}
-            task={task}
-            removeTask={removeTask}
-            toggleTaskState={toggleTaskState}
-          />
-        ))}
+        {todo &&
+          todo.tasks.map((task) => (
+            <Task
+              key={task.id}
+              task={task}
+              removeTask={handleRemoveTask}
+              toggleTaskState={toggleTaskState}
+            />
+          ))}
       </AnimatePresence>
     )
   }
@@ -154,7 +158,12 @@ export function TodoDetails() {
   return (
     <div className={styles.body}>
       <div className={styles.container}>
-        <FormInput placeholder="Add new task" addAction={addTask} />
+        <FormInput
+          inactive={!todo}
+          placeholder="Add new task"
+          addAction={handleAddTask}
+        />
+
         {todo && <h3>{todo.title}</h3>}
         <div className={styles.todoHeaderContainer}>
           <NavLink to="/" className={styles.backLink}>
