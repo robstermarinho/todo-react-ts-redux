@@ -24,6 +24,12 @@
 .inputContainer input::placeholder {
   color: var(--gray-300);
 }
+.inputContainer input:disabled{
+  background-color: var(--gray-400);
+  cursor: not-allowed;
+  border: 1px solid var(--gray-700);
+  opacity: 0.5;
+}
 .inputContainer input.inputError {
   outline: none;
   border-color: var(--danger);
@@ -58,4 +64,6 @@
 .inputContainer button:disabled {
   background-color: var(--gray-400);
   cursor: not-allowed;
+  border: 1px solid var(--gray-700);
+  opacity: 0.5;
 }

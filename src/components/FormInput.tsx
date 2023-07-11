@@ -6,9 +6,14 @@ import { toast } from 'react-toastify'
 interface FormInputProps {
   addAction: (title: string) => void
   placeholder?: string
+  inactive?: boolean
 }
 
-export function FormInput({ addAction, placeholder }: FormInputProps) {
+export function FormInput({
+  addAction,
+  placeholder,
+  inactive = false,
+}: FormInputProps) {
   const [title, setTitle] = useState('')
   const [hasError, setHasError] = useState(false)
 
@@ -19,6 +24,7 @@ export function FormInput({ addAction, placeholder }: FormInputProps) {
 
   const handleInputSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (inactive) return
     if (title.trim() === '') {
       toast.error('Please, enter a valid task title.')
       setHasError(true)
@@ -32,6 +38,7 @@ export function FormInput({ addAction, placeholder }: FormInputProps) {
   return (
     <form onSubmit={handleInputSubmit} className={styles.inputContainer}>
       <input
+        disabled={inactive}
         onFocus={() => setHasError(false)}
         onChange={handleInputChange}
         value={title}
@@ -39,7 +46,7 @@ export function FormInput({ addAction, placeholder }: FormInputProps) {
         placeholder={placeholder || 'Add new item'}
         className={hasError ? styles.inputError : ''}
       />
-      <button type="submit">
+      <button type="submit" disabled={inactive}>
         <span>Add</span>
         <PlusCircle size={16} weight="bold" />
       </button>
