@@ -8,26 +8,35 @@ import { Info } from '../components/Info'
 import { Task, TasksHeader } from '../components/Task'
 import { NavLink, useParams } from 'react-router-dom'
 
-import { ArrowCircleLeft } from 'phosphor-react'
+import { ArrowCircleLeft, Clock } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
 import { TaskType, TodoType, TodosState } from '../@types/todo'
 import {
   addTodoTask,
+  removeAllTodoTasks,
   removeTodoTask,
   toggleAllTodoTasks,
   toggleTodoTask,
 } from '../redux/reducers/todoSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUnixTime } from 'date-fns'
+import { reducerStateType } from '../redux/store'
 
 export function TodoDetails() {
   const params = useParams()
   const slug = params.slug || ''
-
   const dispatch = useDispatch()
 
-  const todo = useSelector((state: TodosState) =>
-    state.todos.find((todo: TodoType) => todo.slug === slug),
+  const todo = useSelector((state: reducerStateType) =>
+    state.todos.todos.find((todo: TodoType) => todo.slug === slug),
+  )
+
+  const activeCycle = useSelector(
+    (state: reducerStateType) =>
+      state.cycles.activeCycleId &&
+      state.cycles.cycles.find(
+        (cycle) => cycle.id === state.cycles.activeCycleId,
+      ),
   )
 
   const handleAddTask = (title: string) => {
@@ -58,7 +67,7 @@ export function TodoDetails() {
   }
 
   const handleRemoveAllTasks = () => {
-    dispatch(removeTodoTask({ slug }))
+    dispatch(removeAllTodoTasks({ slug }))
   }
 
   const handleToggleAllTasksState = (state: boolean) => {
@@ -100,16 +109,6 @@ export function TodoDetails() {
 
     return `${doneTasks.length}`
   }, [todo])
-
-  // const sortTasks = (taskA: TaskType, taskB: TaskType) => {
-  //   if (taskA.isDone && !taskB.isDone) {
-  //     return 1
-  //   }
-  //   if (!taskA.isDone && taskB.isDone) {
-  //     return -1
-  //   }
-  //   return 0
-  // }
 
   const renderTasks = () => {
     if (!todo) {
@@ -166,10 +165,17 @@ export function TodoDetails() {
 
         {todo && <h3>{todo.title}</h3>}
         <div className={styles.todoHeaderContainer}>
-          <NavLink to="/" className={styles.backLink}>
-            <ArrowCircleLeft />
-            <span>Back </span>
-          </NavLink>
+          <div className={styles.todoHeader}>
+            <NavLink to="/" className={styles.backLink}>
+              <ArrowCircleLeft />
+              <span>Back </span>
+            </NavLink>
+
+            <NavLink to={`/todo/${slug}/cycle`} className={styles.backLink}>
+              <Clock />
+              Task Timer
+            </NavLink>
+          </div>
           <div className={styles.infoContainer}>
             <Info title="Tasks" amount={numberOfTasks} />
             <Info title="Done" amount={numberOfDoneTasks} purple />

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { TodosState } from '../@types/todo'
 
 export function Header() {
-  const info = useSelector((state: TodosState) => state.info)
+  const info = useSelector((state: TodosState) => state.todos.info)
 
   return (
     <header className={styles.header}>

@@ -1,3 +1,5 @@
+import { Cycle } from './cycle'
+
 export interface TaskType {
   id: string
   title: string
@@ -50,6 +52,7 @@ export interface TaskProps {
   task: TaskType
   removeTask: (id: string) => void
   toggleTaskState: (id: string) => void
+  activeCycle?: Cycle | null | undefined
 }
 
 export interface TasksHeaderProps {

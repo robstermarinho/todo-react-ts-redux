@@ -4,7 +4,7 @@ import { AnimatePresence } from 'framer-motion'
 import { Todo } from '../../components/Todo'
 import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
 import { EmptyContainer } from '../../components/EmptyContainer'
-import { TodoType, TodosState } from '../../@types/todo'
+import { TodoType } from '../../@types/todo'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   addTodo,
@@ -13,9 +13,10 @@ import {
 } from '../../redux/reducers/todoSlice'
 import { slugify } from '../../helper/util'
 import { toast } from 'react-toastify'
+import { reducerStateType } from '../../redux/store'
 
 export function HomePage() {
-  const todos = useSelector((state: TodosState) => state.todos)
+  const todos = useSelector((state: reducerStateType) => state.todos.todos)
   const dispatch = useDispatch()
 
   const handleAddTodo = (title: string) => {

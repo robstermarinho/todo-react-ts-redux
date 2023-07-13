@@ -14,6 +14,8 @@
   --blue: #4ea8de;
   --blue-dark: #1e6f9f;
   --danger: #e25858;
+  --danger-dark: #7A1921;
+  --yellow-500: #FBA94C
 }
 
 * {
@@ -31,7 +33,7 @@ body,
 input,
 textarea,
 button {
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 1rem;
 }

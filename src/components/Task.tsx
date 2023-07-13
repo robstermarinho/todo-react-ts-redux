@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './Task.module.css'
 import { CheckCircle, Circle } from 'phosphor-react'
 import { motion } from 'framer-motion'
@@ -6,13 +6,30 @@ import { DeleteTaskDialog } from './DeleteTaskDialog'
 import { motionVariants } from '../helper/variants'
 import { formatDistanceToNow, fromUnixTime } from 'date-fns'
 import { TaskProps, TasksHeaderProps } from '../@types/todo'
+import { useSelector } from 'react-redux'
+import { reducerStateType } from '../redux/store'
+import { Countdown } from '../pages/CyclePage/Components/Countdown/count-down'
+import { toast } from 'react-toastify'
 
 export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
+  const isTaskInActiveCycle = useSelector((state: reducerStateType) => {
+    return state.cycles.activeTaskId === task.id
+  })
+
   const handleCheckChange = (taskID: string) => {
+    if (isTaskInActiveCycle) {
+      toast.error('You cannot change the state of a task in an active cycle.')
+      return
+    }
     toggleTaskState(taskID)
   }
 
   const handleRemoveTask = (taskID: string) => {
+    if (isTaskInActiveCycle) {
+      toast.error('You cannot remove a task in an active cycle.')
+      return
+    }
+
     removeTask(taskID)
   }
 
@@ -25,7 +42,7 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
       variants={motionVariants}
       className={`${styles.todoItem} ${
         task.isDone ? styles.checkboxChecked : styles.checkboxDefault
-      }`}
+      } ${isTaskInActiveCycle && styles.taskInActiveCycle}`}
     >
       <div className={`${styles.checkboxContainer}`}>
         {task.isDone && <CheckCircle size={22} weight="fill" />}
@@ -37,7 +54,10 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
         />
       </div>
 
-      <a onClick={() => handleCheckChange(task.id)}>{task.title}</a>
+      <a onClick={() => handleCheckChange(task.id)}>
+        {task.title}
+        {isTaskInActiveCycle && <Countdown isMinimal={true} />}
+      </a>
       <small>
         {formatDistanceToNow(fromUnixTime(task.date), { addSuffix: true })}
       </small>

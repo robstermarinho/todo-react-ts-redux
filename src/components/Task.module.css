@@ -24,6 +24,14 @@
 .todoItem > a:hover {
   color: var(--gray-200);
 }
+.todoItem .activeCycle{
+  border: 1px solid var(--gray-400);
+  background-color: var(--blue);
+  border-radius: 4px;
+  margin-left: 10px;
+  padding: 2px 10px;
+  font-weight: bold;
+}
 
 .todoItem > button {
   border: none;
@@ -107,4 +115,10 @@
   border-bottom: none;
   border-left: none;
   border-right: none;
+}
+
+
+.taskInActiveCycle{
+  border: 1px solid var(--gray-500);
+  background-color: var(--gray-600);
 }
