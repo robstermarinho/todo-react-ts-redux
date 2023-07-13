@@ -98,7 +98,18 @@ export const todoSlice = createSlice({
       if (currentTaskIndex < 0) {
         return state
       }
-      state.todos[currentTodoIndex].tasks[currentTaskIndex].isDone = done
+
+      if (done) {
+        const currentTask = state.todos[currentTodoIndex].tasks.splice(
+          currentTaskIndex,
+          1,
+        )[0]
+        currentTask.isDone = done
+
+        state.todos[currentTodoIndex].tasks.push(currentTask)
+      } else {
+        state.todos[currentTodoIndex].tasks[currentTaskIndex].isDone = done
+      }
       state.info = recalculateTodosInfo(state.todos)
     },
     toggleAllTodoTasks: (state, action) => {
