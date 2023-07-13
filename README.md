@@ -7,7 +7,7 @@
 
 # Todo App
 
-This is a Todo application built with React, TypeScript, Redux and Redux Persist. The app allows users to manage todo lists and tasks in a user-friendly interface.
+This is a Todo application built with React, TypeScript, Redux Toolkit and Redux Persist. The app allows users to manage todo lists and tasks in a user-friendly interface. Also, It allows users to start a task timer for not completed todo tasks.
 
 ## Installation
 
