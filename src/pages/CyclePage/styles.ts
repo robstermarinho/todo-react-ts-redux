@@ -24,7 +24,6 @@ export const CycleContainer = styled.main`
     gap: 2rem;
     margin: 0px;
     width: 100%;
-    a,
     a {
       display: flex;
       justify-content: flex-start;
@@ -38,6 +37,27 @@ export const CycleContainer = styled.main`
       cursor: pointer;
       &:hover {
         color: var(--blue);
+      }
+    }
+    button {
+      border: 0;
+      background: transparent;
+
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      text-decoration: none;
+      gap: 0.2rem;
+      padding: 10px 0px;
+      color: var(--gray-300);
+      border-radius: 8px;
+      transition: color 0.2s ease-in-out;
+      cursor: pointer;
+      &:hover {
+        color: var(--blue);
+        span {
+          color: var(--blue);
+        }
       }
     }
   }

@@ -19,6 +19,7 @@ import {
   interruptCurrentCycle,
   removeAllPreviousCycles,
 } from '../../redux/reducers/cycleSlice'
+import { ConfirmDialog } from '../../components/ConfirmDialog'
 
 const newCycleFormValidationSchema = zod.object({
   task: zod.string().min(1, 'The task is required.'),
@@ -90,13 +91,14 @@ export function CyclePage() {
           </NavLink>
 
           {numberOfPreviousCycles > 0 && (
-            <a
-              className="removeAllCycles"
-              onClick={() => dispatch(removeAllPreviousCycles())}
-            >
-              <Trash />
-              Clear {numberOfPreviousCycles} cycles from history
-            </a>
+            <ConfirmDialog
+              onSuccess={() => dispatch(removeAllPreviousCycles())}
+              title="Clear cycles history"
+              question={`Are you sure you want to clear ${numberOfPreviousCycles} cycles from history?`}
+              confirmText="Clear"
+              cancelText="Cancel"
+              buttonLabel="Clear cycles history"
+            />
           )}
         </div>
         <Countdown />

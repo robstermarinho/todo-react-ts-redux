@@ -1,3 +1,12 @@
+.buttonLabel{
+  color: var(--gray-300);
+}
+.dialogConfirmButton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:10px;
+}
 div.container {
   width: 100vw;
   height: 100vh;
@@ -20,7 +29,9 @@ div.modal {
   border-top: 1px solid var(--gray-400);
   filter: drop-shadow(0px 8px 8px rgba(0, 0, 0, 0.25));
 }
-
+div.modal.big {
+  width: 60rem;
+}
 div.modal > h2 {
   color: var(--blue);
   font-size: 1.5rem;
@@ -43,6 +54,8 @@ div.modal .buttonsContainer{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
+  gap: 10px;
 }
 div.modal .buttonsContainer > button {
   display: flex;
@@ -52,11 +65,12 @@ div.modal .buttonsContainer > button {
   cursor: pointer;
   border-radius: 0.25rem;
   border: none;
-  width: 40%;
+  width: 100%;
   transition: all 0.2s;
   padding: 1rem;
   font-size: 14px;
   font-weight: 700;
+
 }
 
 div.modal .buttonsContainer > button.modalConfirm {

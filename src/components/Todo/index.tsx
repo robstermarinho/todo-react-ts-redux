@@ -1,6 +1,6 @@
 import { ListChecks } from 'phosphor-react'
 import { TodoContainer } from './styles'
-import { DeleteTaskDialog } from '../DeleteTaskDialog'
+import { ConfirmDialog } from '../ConfirmDialog'
 import { Link } from 'react-router-dom'
 import { motionVariants } from '../../helper/variants'
 import { Info } from '../Info'
@@ -46,7 +46,7 @@ export function Todo({ todo, removeTodo }: TodoProps) {
         </div>
       </Link>
 
-      <DeleteTaskDialog
+      <ConfirmDialog
         onSuccess={() => removeTodo(todo.id)}
         title="Remove Todo"
         question="Are you sure you want to remove this todo list?"

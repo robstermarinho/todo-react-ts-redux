@@ -2,7 +2,7 @@ import { FormInput } from '../../components/FormInput'
 import { HomePageContainer } from './styles'
 import { AnimatePresence } from 'framer-motion'
 import { Todo } from '../../components/Todo'
-import { DeleteTaskDialog } from '../../components/DeleteTaskDialog'
+import { ConfirmDialog } from '../../components/ConfirmDialog'
 import { EmptyContainer } from '../../components/EmptyContainer'
 import { TodoType } from '../../@types/todo'
 import { useDispatch, useSelector } from 'react-redux'
@@ -69,7 +69,7 @@ export function HomePage() {
         <FormInput placeholder="Add new todo list" addAction={handleAddTodo} />
         <div className="header-container">
           {todos.length > 0 && (
-            <DeleteTaskDialog
+            <ConfirmDialog
               title="Remove all todo lists"
               question="Are you sure you want to remove all todo lists?"
               onSuccess={handleRemoveAllTodos}
