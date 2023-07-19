@@ -146,9 +146,25 @@ export const {
 
 export default todoSlice.reducer
 
-export const recalculateInfoAsync = () => (dispatch: any, getState: any) => {
-  setTimeout(() => {
-    console.log(getState(), 'CURRENT STATE ASYNC')
-    dispatch(recalculateInfo())
-  }, 1000)
+export const recalculateInfoAsync =
+  () =>
+  (dispatch: any, getState: any): void => {
+    console.log(getState(), 'CURRENT STATE')
+    setTimeout(() => {
+      console.log(getState(), 'CURRENT STATE ASYNC')
+      dispatch(recalculateInfo())
+    }, 1000)
+  }
+
+export const fetchDataExample = () => {
+  return async (dispatch: any) => {
+    try {
+      await fetch('https://jsonplaceholder.typicode.com/todos/1')
+        .then((response) => response.json())
+        .then((json) => console.log(json))
+      dispatch(recalculateInfoAsync())
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }

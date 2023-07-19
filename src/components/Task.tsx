@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import styles from './Task.module.css'
-import { CheckCircle, Circle } from 'phosphor-react'
+import { CheckCircle, Circle, Clock } from 'phosphor-react'
 import { motion } from 'framer-motion'
-import { DeleteTaskDialog } from './DeleteTaskDialog'
+import { ConfirmDialog } from './ConfirmDialog'
 import { motionVariants } from '../helper/variants'
 import { formatDistanceToNow, fromUnixTime } from 'date-fns'
 import { TaskProps, TasksHeaderProps } from '../@types/todo'
@@ -14,6 +14,10 @@ import { toast } from 'react-toastify'
 export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
   const isTaskInActiveCycle = useSelector((state: reducerStateType) => {
     return state.cycles.activeTaskId === task.id
+  })
+
+  const taskCycles = useSelector((state: reducerStateType) => {
+    return state.cycles.cycles.filter((cycle) => cycle.taskId === task.id)
   })
 
   const handleCheckChange = (taskID: string) => {
@@ -31,6 +35,62 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
     }
 
     removeTask(taskID)
+  }
+
+  const renderTaskCycles = () => {
+    return (
+      taskCycles.length > 0 && (
+        <div className={styles.taskCyclesContainer}>
+          <table className={styles.taskCyclesTable}>
+            <thead>
+              <tr>
+                <th>Duration</th>
+                <th>Started At</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {taskCycles.map((cycle) => {
+                return (
+                  <tr key={cycle.id}>
+                    <td> {cycle.minutesAmount} minutes</td>
+                    <td>
+                      {formatDistanceToNow(new Date(cycle.startDate), {
+                        addSuffix: true,
+                      })}
+                    </td>
+                    <td>
+                      {cycle.finishedDate && (
+                        <div
+                          className={`${styles.statusLabel} ${styles.completed}`}
+                        >
+                          Completed
+                        </div>
+                      )}
+
+                      {cycle.interruptedDate && (
+                        <div
+                          className={`${styles.statusLabel} ${styles.interrupted}`}
+                        >
+                          Interrupted
+                        </div>
+                      )}
+                      {!cycle.finishedDate && !cycle.interruptedDate && (
+                        <div
+                          className={`${styles.statusLabel} ${styles.working}`}
+                        >
+                          Working
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )
+    )
   }
 
   return (
@@ -58,10 +118,25 @@ export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
         {task.title}
         {isTaskInActiveCycle && <Countdown isMinimal={true} />}
       </a>
+
       <small>
         {formatDistanceToNow(fromUnixTime(task.date), { addSuffix: true })}
       </small>
-      <DeleteTaskDialog
+      {taskCycles.length > 0 && (
+        <ConfirmDialog
+          showConfirmButton={false}
+          onSuccess={() => null}
+          title={`Cycles History`}
+          targetName={task.title}
+          question=""
+          cancelText="Close"
+          buttonLabel={<span> {taskCycles.length} Cyles </span>}
+          btnIcon={<Clock size={20} weight="duotone" />}
+          body={renderTaskCycles()}
+          big
+        />
+      )}
+      <ConfirmDialog
         onSuccess={() => handleRemoveTask(task.id)}
         title="Remove Task"
         question="Are you sure you want to remove this task?"
@@ -108,7 +183,7 @@ export function TasksHeader({ selectAll, removeAll }: TasksHeaderProps) {
         />
       </div>
 
-      <DeleteTaskDialog
+      <ConfirmDialog
         onSuccess={handleRemoveAll}
         title="Remove All Tasks"
         question="Are you sure you want to remove all tasks?"

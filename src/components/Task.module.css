@@ -122,3 +122,94 @@
   border: 1px solid var(--gray-500);
   background-color: var(--gray-600);
 }
+
+
+
+
+.statusLabel{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--white);
+}
+.statusLabel::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  
+}
+.statusLabel.completed::before{
+  background: var(--green-500);
+}
+.statusLabel.interrupted::before{
+  background: var(--danger);
+
+}
+
+@keyframes blinker {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100%{
+    opacity: 0.3;
+  }
+}
+
+.statusLabel.working::before{
+  background: var(--yellow-500);
+  /* blink animation */
+  animation: blinker 1s linear infinite;
+
+}
+
+.taskCyclesContainer{
+  flex: 1;
+  overflow: auto;
+  margin-top: 2rem;
+}
+
+.taskCyclesContainer .taskCyclesTable{
+
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.taskCyclesContainer .taskCyclesTable th{
+  background-color: var(--gray-600);
+  padding: 1rem;
+  text-align: left;
+  color: var(--gray-100);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.taskCyclesContainer .taskCyclesTable th:first-child {
+  border-top-left-radius: 8px;
+  padding-left: 1.5rem;
+}
+
+.taskCyclesContainer .taskCyclesTable th:last-child {
+  border-top-right-radius: 8px;
+  padding-right: 1.5rem;
+}
+.taskCyclesContainer .taskCyclesTable td{
+  background-color: var(--gray-700);
+  border-top: 4px solid var(--gray-700);
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: left;
+}
+.taskCyclesContainer .taskCyclesTable td:first-child {
+  width: 50%;
+  padding-left: 1.5rem;
+}
+
+.taskCyclesContainer .taskCyclesTable td:last-child {
+  padding-right: 1.5rem;
+}
