@@ -1,3 +1,18 @@
+
+@keyframes blinker {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100%{
+    opacity: 0.5;
+  }
+}
+.todoHeader.blink{
+  animation: blinker 1s linear infinite;
+}
 .todoHeader .blue {
   color: var(--blue) !important;
 }

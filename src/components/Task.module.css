@@ -161,9 +161,7 @@
 
 .statusLabel.working::before{
   background: var(--yellow-500);
-  /* blink animation */
   animation: blinker 1s linear infinite;
-
 }
 
 .taskCyclesContainer{

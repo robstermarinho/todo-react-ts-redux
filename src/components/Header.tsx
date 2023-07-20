@@ -3,10 +3,16 @@ import todoLogo from '../assets/todo-logo.svg'
 import { Info } from './Info'
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { TodosState } from '../@types/todo'
+import { reducerStateType } from '../redux/store'
 
 export function Header() {
-  const info = useSelector((state: TodosState) => state.todos.info)
+  const info = useSelector((state: reducerStateType) => state.todos.info)
+  const numberOfPreviousCycles = useSelector(
+    (state: reducerStateType) => state.cycles.cycles.length,
+  )
+  const activeCycleId = useSelector(
+    (state: reducerStateType) => state.cycles.activeCycleId,
+  )
 
   return (
     <header className={styles.header}>
@@ -33,6 +39,16 @@ export function Header() {
               false
             }
           />
+          <Info title="Cycles" amount={`${numberOfPreviousCycles}`} />
+          {activeCycleId && (
+            <Info
+              blink
+              purple
+              numberHighlight
+              title="In progress"
+              amount={`1`}
+            />
+          )}
         </div>
       </div>
     </header>

@@ -5,6 +5,7 @@ interface InfoProps {
   amount: string
   purple?: boolean
   numberHighlight?: boolean
+  blink?: boolean
 }
 
 export function Info({
@@ -12,9 +13,10 @@ export function Info({
   amount,
   purple,
   numberHighlight = false,
+  blink = false,
 }: InfoProps) {
   return (
-    <div className={styles.todoHeader}>
+    <div className={`${styles.todoHeader} ${blink ? styles.blink : ''}`}>
       {title && (
         <h5 className={purple ? styles.purple : styles.blue}>{title}</h5>
       )}

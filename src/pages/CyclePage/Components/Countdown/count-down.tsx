@@ -8,18 +8,10 @@ import {
   markCurrentCycleAsFinished,
   setSecondsPassed,
 } from '../../../../redux/reducers/cycleSlice'
-import { useParams } from 'react-router-dom'
 import { TodoType } from '../../../../@types/todo'
 
 export function Countdown({ isMinimal = false }) {
-  const params = useParams()
-  const slug = params.slug || ''
-
   const dispatch = useDispatch()
-
-  const todo = useSelector((state: reducerStateType) =>
-    state.todos.todos.find((todo: TodoType) => todo.slug === slug),
-  )
 
   const activeCycle = useSelector(
     (state: reducerStateType) =>
@@ -32,7 +24,13 @@ export function Countdown({ isMinimal = false }) {
   const activeTaskId = useSelector(
     (state: reducerStateType) => state.cycles.activeTaskId,
   )
-  const activeTask = todo?.tasks.find((task) => task.id === activeTaskId)
+
+  const activeTodo = useSelector((state: reducerStateType) =>
+    state.todos.todos.find((todo: TodoType) =>
+      todo.tasks.find((task) => task.id === activeTaskId),
+    ),
+  )
+  const activeTask = activeTodo?.tasks.find((task) => task.id === activeTaskId)
 
   const amountSecondsPassed = useSelector(
     (state: reducerStateType) => state.cycles.amountSecondsPassed,
@@ -81,7 +79,11 @@ export function Countdown({ isMinimal = false }) {
 
   return (
     <>
-      {activeTask && !isMinimal && <h3>Working on {activeTask.title} </h3>}
+      {activeTodo && activeTask && !isMinimal && (
+        <h3>
+          Working on {activeTask.title} - {activeTodo.title}
+        </h3>
+      )}
       <CountdownContainer className={`${isMinimal ? 'is-minimal' : ''}`}>
         <span>{minutes[0]}</span>
         <span>{minutes[1]}</span>
