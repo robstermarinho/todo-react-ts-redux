@@ -1,6 +1,6 @@
 import styles from './ConfirmDialog.module.css'
-import { Trash } from 'phosphor-react'
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { Trash, X } from 'phosphor-react'
+import * as Dialog from '@radix-ui/react-dialog'
 
 interface ConfirmDialogProps {
   onSuccess: () => void
@@ -30,44 +30,47 @@ export function ConfirmDialog({
   big = false,
 }: ConfirmDialogProps) {
   return (
-    <AlertDialog.Root>
-      <AlertDialog.Trigger asChild>
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
         <button className={styles.dialogConfirmButton}>
           {btnIcon}{' '}
           {buttonLabel && (
             <span className={styles.buttonLabel}>{buttonLabel}</span>
           )}
         </button>
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Overlay className={styles.AlertDialogOverlay} />
-        <AlertDialog.Content
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className={styles.AlertDialogOverlay} />
+        <Dialog.Content
           className={`${styles.AlertDialogContent} ${big ? styles.big : ''}`}
         >
-          <AlertDialog.Title className={styles.AlertDialogTitle}>
+          <Dialog.Title className={styles.AlertDialogTitle}>
             {title}
-          </AlertDialog.Title>
-          <AlertDialog.Description className={styles.AlertDialogDescription}>
+          </Dialog.Title>
+          <Dialog.Close className={styles.AlertDialogClose}>
+            <X />
+          </Dialog.Close>
+          <Dialog.Description className={styles.AlertDialogDescription}>
             {targetName && <h4>{targetName}</h4>}
             <p>{question}</p>
             {body}
-          </AlertDialog.Description>
+          </Dialog.Description>
           <div className={styles.buttonsContainer}>
-            <AlertDialog.Cancel asChild>
+            <Dialog.Close asChild>
               <button className={styles.modalCancel}>
                 {cancelText || 'Cancel'}
               </button>
-            </AlertDialog.Cancel>
-            <AlertDialog.Action asChild>
+            </Dialog.Close>
+            <Dialog.Close asChild>
               {showConfirmButton && (
                 <button onClick={onSuccess} className={styles.modalConfirm}>
                   {confirmText || 'Confirm'}
                 </button>
               )}
-            </AlertDialog.Action>
+            </Dialog.Close>
           </div>
-        </AlertDialog.Content>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }

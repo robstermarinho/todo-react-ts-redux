@@ -72,10 +72,12 @@ export function Countdown({ isMinimal = false }) {
   const seconds = String(secondsAmount).padStart(2, '0')
 
   useEffect(() => {
-    if (activeCycle) {
-      document.title = `${minutes}:${seconds}`
+    if (activeCycle && activeTask && activeTodo) {
+      document.title = ` ${activeTask.title} - ${activeTodo.title} ${minutes}:${seconds}`
+    } else if (!activeCycle) {
+      document.title = `TODO + React + TS`
     }
-  }, [minutes, seconds, activeCycle])
+  }, [minutes, seconds, activeCycle, activeTask, activeTodo])
 
   return (
     <>
