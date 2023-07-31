@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { CyclesState } from '../../@types/cycle'
 import { v4 as uid } from 'uuid'
+import { reducerStateType } from '../store'
+import { TaskProps, TaskType } from '../../@types/todo'
 
 export const initialCycleState: CyclesState = {
   cycles: [],
@@ -65,6 +67,10 @@ export const cycleSlice = createSlice({
   },
 })
 
+/**
+ * Actions
+ */
+
 export const {
   addNewCycle,
   interruptCurrentCycle,
@@ -72,5 +78,36 @@ export const {
   setSecondsPassed,
   removeAllPreviousCycles,
 } = cycleSlice.actions
+
+/**
+ * Selectors
+ */
+
+export const selectNumberOfPreviousCycles = (state: reducerStateType) =>
+  state.cycles.cycles.length
+
+export const selectActiveCycleId = (state: reducerStateType) =>
+  state.cycles.activeCycleId
+
+export const selectActiveCycle = (state: reducerStateType) =>
+  state.cycles.activeCycleId &&
+  state.cycles.cycles.find((cycle) => cycle.id === state.cycles.activeCycleId)
+
+export const selectActiveTaskId = (state: reducerStateType) =>
+  state.cycles.activeTaskId
+
+export const selectIsTaskInActiveCycle = (
+  state: reducerStateType,
+  task: TaskType,
+) => {
+  return state.cycles.activeTaskId === task.id
+}
+
+export const selectAmountSecondsPassed = (state: reducerStateType) =>
+  state.cycles.amountSecondsPassed
+
+export const selecTaskCycles = (state: reducerStateType, task: TaskType) => {
+  return state.cycles.cycles.filter((cycle) => cycle.taskId === task.id)
+}
 
 export default cycleSlice.reducer

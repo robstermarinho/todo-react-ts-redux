@@ -6,6 +6,7 @@ import {
   recalculateTodosInfo,
 } from '../../reducers/todos/reducer'
 import { getUnixTime } from 'date-fns'
+import { reducerStateType } from '../store'
 
 export const todoSlice = createSlice({
   name: 'todo',
@@ -127,10 +128,15 @@ export const todoSlice = createSlice({
       state.info = recalculateTodosInfo(state.todos)
     },
     recalculateInfo: (state) => {
+      console.log('recalculateInfo')
       state.info = recalculateTodosInfo(state.todos)
     },
   },
 })
+
+/**
+ * Actions
+ */
 
 export const {
   addTodo,
@@ -144,7 +150,28 @@ export const {
   recalculateInfo,
 } = todoSlice.actions
 
-export default todoSlice.reducer
+/**
+ * Selectors
+ */
+
+export const selectTodos = (state: reducerStateType) => state.todos.todos
+
+export const selectInfo = (state: reducerStateType) => state.todos.info
+
+export const selectTodoBySlug = (state: reducerStateType, slug: string) =>
+  state.todos.todos.find((todo: TodoType) => todo.slug === slug)
+
+export const selectActiveTodoByTaskId = (
+  state: reducerStateType,
+  activeTaskId: string | null,
+) =>
+  state.todos.todos.find((todo: TodoType) =>
+    todo.tasks.find((task) => task.id === activeTaskId),
+  )
+
+/**
+ * Thunk functions
+ */
 
 export const recalculateInfoAsync =
   () =>
@@ -157,14 +184,17 @@ export const recalculateInfoAsync =
   }
 
 export const fetchDataExample = () => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
     try {
-      await fetch('https://jsonplaceholder.typicode.com/todos/1')
+      await fetch('http://localhost:3333/todos')
         .then((response) => response.json())
         .then((json) => console.log(json))
-      dispatch(recalculateInfoAsync())
+
+      console.log(getState(), 'CURRENT STATE')
     } catch (e) {
       console.log(e)
     }
   }
 }
+
+export default todoSlice.reducer

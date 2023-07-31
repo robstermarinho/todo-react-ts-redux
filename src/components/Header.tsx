@@ -3,16 +3,16 @@ import todoLogo from '../assets/todo-logo.svg'
 import { Info } from './Info'
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { reducerStateType } from '../redux/store'
+import {
+  selectActiveCycleId,
+  selectNumberOfPreviousCycles,
+} from '../redux/reducers/cycleSlice'
+import { selectInfo } from '../redux/reducers/todoSlice'
 
 export function Header() {
-  const info = useSelector((state: reducerStateType) => state.todos.info)
-  const numberOfPreviousCycles = useSelector(
-    (state: reducerStateType) => state.cycles.cycles.length,
-  )
-  const activeCycleId = useSelector(
-    (state: reducerStateType) => state.cycles.activeCycleId,
-  )
+  const info = useSelector(selectInfo)
+  const numberOfPreviousCycles = useSelector(selectNumberOfPreviousCycles)
+  const activeCycleId = useSelector(selectActiveCycleId)
 
   return (
     <header className={styles.header}>

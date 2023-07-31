@@ -1,4 +1,4 @@
-import { ArrowCircleLeft, HandPalm, Play, Trash } from 'phosphor-react'
+import { ArrowCircleLeft, HandPalm, Play } from 'phosphor-react'
 import {
   CycleContainer,
   StartCountdownButton,
@@ -13,13 +13,16 @@ import { NewCycleForm } from './Components/NewCycleForm/new-cicle'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, useParams } from 'react-router-dom'
 import { reducerStateType } from '../../redux/store'
-import { TodoType } from '../../@types/todo'
+
 import {
   addNewCycle,
   interruptCurrentCycle,
   removeAllPreviousCycles,
+  selectActiveCycle,
+  selectNumberOfPreviousCycles,
 } from '../../redux/reducers/cycleSlice'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
+import { selectTodoBySlug } from '../../redux/reducers/todoSlice'
 
 const newCycleFormValidationSchema = zod.object({
   task: zod.string().min(1, 'The task is required.'),
@@ -37,16 +40,10 @@ export function CyclePage() {
   const dispatch = useDispatch()
 
   const todo = useSelector((state: reducerStateType) =>
-    state.todos.todos.find((todo: TodoType) => todo.slug === slug),
+    selectTodoBySlug(state, slug),
   )
 
-  const activeCycle = useSelector(
-    (state: reducerStateType) =>
-      state.cycles.activeCycleId &&
-      state.cycles.cycles.find(
-        (cycle) => cycle.id === state.cycles.activeCycleId,
-      ),
-  )
+  const activeCycle = useSelector(selectActiveCycle)
 
   const newCycleForm = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
@@ -56,9 +53,7 @@ export function CyclePage() {
     },
   })
 
-  const numberOfPreviousCycles = useSelector(
-    (state: reducerStateType) => state.cycles.cycles.length,
-  )
+  const numberOfPreviousCycles = useSelector(selectNumberOfPreviousCycles)
 
   const { handleSubmit, watch, reset } = newCycleForm
 

@@ -10,15 +10,19 @@ import { useSelector } from 'react-redux'
 import { reducerStateType } from '../redux/store'
 import { Countdown } from '../pages/CyclePage/Components/Countdown/count-down'
 import { toast } from 'react-toastify'
+import {
+  selectIsTaskInActiveCycle,
+  selecTaskCycles,
+} from '../redux/reducers/cycleSlice'
 
 export function Task({ task, removeTask, toggleTaskState }: TaskProps) {
-  const isTaskInActiveCycle = useSelector((state: reducerStateType) => {
-    return state.cycles.activeTaskId === task.id
-  })
+  const isTaskInActiveCycle = useSelector((state: reducerStateType) =>
+    selectIsTaskInActiveCycle(state, task),
+  )
 
-  const taskCycles = useSelector((state: reducerStateType) => {
-    return state.cycles.cycles.filter((cycle) => cycle.taskId === task.id)
-  })
+  const taskCycles = useSelector((state: reducerStateType) =>
+    selecTaskCycles(state, task),
+  )
 
   const handleCheckChange = (taskID: string) => {
     if (isTaskInActiveCycle) {

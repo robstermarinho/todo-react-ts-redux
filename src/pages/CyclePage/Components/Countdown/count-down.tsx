@@ -1,40 +1,28 @@
 import { differenceInSeconds } from 'date-fns'
 import { useEffect } from 'react'
 import { CountdownContainer } from './styles'
-import { Cycle } from '../../../../@types/cycle'
 import { useDispatch, useSelector } from 'react-redux'
 import { reducerStateType } from '../../../../redux/store'
 import {
   markCurrentCycleAsFinished,
+  selectActiveCycle,
+  selectActiveTaskId,
+  selectAmountSecondsPassed,
   setSecondsPassed,
 } from '../../../../redux/reducers/cycleSlice'
-import { TodoType } from '../../../../@types/todo'
+import { selectActiveTodoByTaskId } from '../../../../redux/reducers/todoSlice'
 
 export function Countdown({ isMinimal = false }) {
   const dispatch = useDispatch()
 
-  const activeCycle = useSelector(
-    (state: reducerStateType) =>
-      state.cycles.activeCycleId &&
-      state.cycles.cycles.find(
-        (cycle: Cycle) => cycle.id === state.cycles.activeCycleId,
-      ),
-  )
-
-  const activeTaskId = useSelector(
-    (state: reducerStateType) => state.cycles.activeTaskId,
-  )
-
+  const activeCycle = useSelector(selectActiveCycle)
+  const activeTaskId = useSelector(selectActiveTaskId)
   const activeTodo = useSelector((state: reducerStateType) =>
-    state.todos.todos.find((todo: TodoType) =>
-      todo.tasks.find((task) => task.id === activeTaskId),
-    ),
+    selectActiveTodoByTaskId(state, activeTaskId),
   )
   const activeTask = activeTodo?.tasks.find((task) => task.id === activeTaskId)
 
-  const amountSecondsPassed = useSelector(
-    (state: reducerStateType) => state.cycles.amountSecondsPassed,
-  )
+  const amountSecondsPassed = useSelector(selectAmountSecondsPassed)
 
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
 

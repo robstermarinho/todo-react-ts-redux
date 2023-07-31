@@ -17,6 +17,7 @@ import {
   removeTodoTask,
   toggleAllTodoTasks,
   toggleTodoTask,
+  selectTodoBySlug,
 } from '../redux/reducers/todoSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUnixTime } from 'date-fns'
@@ -28,15 +29,7 @@ export function TodoDetails() {
   const dispatch = useDispatch()
 
   const todo = useSelector((state: reducerStateType) =>
-    state.todos.todos.find((todo: TodoType) => todo.slug === slug),
-  )
-
-  const activeCycle = useSelector(
-    (state: reducerStateType) =>
-      state.cycles.activeCycleId &&
-      state.cycles.cycles.find(
-        (cycle) => cycle.id === state.cycles.activeCycleId,
-      ),
+    selectTodoBySlug(state, slug),
   )
 
   const handleAddTask = (title: string) => {

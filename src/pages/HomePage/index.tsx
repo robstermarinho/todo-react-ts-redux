@@ -10,13 +10,13 @@ import {
   addTodo,
   removeTodo,
   removeAllTodos,
+  selectTodos,
 } from '../../redux/reducers/todoSlice'
 import { slugify } from '../../helper/util'
 import { toast } from 'react-toastify'
-import { reducerStateType } from '../../redux/store'
 
 export function HomePage() {
-  const todos = useSelector((state: reducerStateType) => state.todos.todos)
+  const todos = useSelector(selectTodos)
   const dispatch = useDispatch()
 
   const handleAddTodo = (title: string) => {
