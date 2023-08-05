@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { api } from '../services/axios'
+import { toast } from 'react-toastify'
 
 interface Post {
   id: string
@@ -17,9 +18,9 @@ interface PostInput {
 
 interface PostsContextProps {
   posts: Post[]
-  status: 'idle' | 'loading' | 'error'
+  status: 'idle' | 'loading' | 'error' | 'deleting'
   error: string | null
-  fetchPosts: (query?: string) => Promise<void>
+  fetchPosts: (isPublished?: boolean, query?: string) => Promise<void>
   createPost: (data: PostInput) => Promise<void>
   updatePost: (data: PostInput) => Promise<void>
   publishPost: (id: string) => Promise<void>
@@ -35,32 +36,41 @@ export const PostsContext = createContext({} as PostsContextProps)
 
 export function PostsProvider({ children }: PostsProviderProps) {
   const [posts, setPosts] = useState<Post[]>([])
-  const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'error' | 'deleting'
+  >('idle')
   const [error, setError] = useState<string | null>(null)
 
   /**
    * Fetch posts
    * @param query
    */
-  const fetchPosts = useCallback(async (query?: string) => {
-    setStatus('loading')
-    setError(null)
-    try {
-      const response = await api.get('posts', {
-        params: {
-          _sort: 'createdAt',
-          _order: 'desc',
-          q: query,
-        },
-      })
-      setPosts(response.data)
-      setStatus('idle')
+  const fetchPosts = useCallback(
+    async (isPublished: boolean | null = false, query?: string) => {
+      setStatus('loading')
       setError(null)
-    } catch (e) {
-      setStatus('error')
-      setError('Impossible to load posts.')
-    }
-  }, [])
+
+      try {
+        const response = await api.get('posts', {
+          params: {
+            _sort: 'createdAt',
+            _order: 'desc',
+            isPublished,
+            q: query,
+          },
+        })
+        setPosts(response.data)
+
+        setStatus('idle')
+        setError(null)
+      } catch (e) {
+        setPosts([])
+        setStatus('error')
+        setError('Impossible to load posts now.')
+      }
+    },
+    [],
+  )
 
   /**
    * Create post
@@ -143,12 +153,21 @@ export function PostsProvider({ children }: PostsProviderProps) {
   }, [])
 
   const deletePost = useCallback(async (id: string) => {
-    await api.delete(`posts/${id}`)
-    setPosts((state) => state.filter((post) => post.id !== id))
+    setStatus('deleting')
+
+    try {
+      await api.delete(`posts/${id}`)
+      setPosts((state) => state.filter((post) => post.id !== id))
+      toast.success('Post removed successfully.')
+    } catch (e) {
+      console.log(e)
+      toast.error('Impossible to remove post now.')
+    }
+    setStatus('idle')
   }, [])
 
   useEffect(() => {
-    fetchPosts()
+    fetchPosts(true)
   }, [fetchPosts])
 
   return (

@@ -14,6 +14,7 @@ interface ConfirmDialogProps {
   showConfirmButton?: boolean
   btnIcon?: React.ReactNode
   big?: boolean
+  disabled?: boolean
 }
 
 export function ConfirmDialog({
@@ -28,11 +29,12 @@ export function ConfirmDialog({
   showConfirmButton = true,
   btnIcon = <Trash size={20} />,
   big = false,
+  disabled = false,
 }: ConfirmDialogProps) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className={styles.dialogConfirmButton}>
+        <button disabled={disabled} className={styles.dialogConfirmButton}>
           {btnIcon}{' '}
           {buttonLabel && (
             <span className={styles.buttonLabel}>{buttonLabel}</span>
