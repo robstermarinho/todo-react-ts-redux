@@ -17,9 +17,22 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
-        <NavLink to="/">
-          <img src={todoLogo} alt="TOTO logo" />
-        </NavLink>
+        <ul className={styles.headerMenu}>
+          <li>
+            {' '}
+            <NavLink to="/">
+              <img src={todoLogo} alt="TOTO logo" />
+            </NavLink>
+          </li>
+          <li>
+            {' '}
+            <NavLink to="/">Home</NavLink>
+          </li>
+          <li>
+            {' '}
+            <NavLink to="/blog">Blog</NavLink>
+          </li>
+        </ul>
 
         <div className={styles.infoContainer}>
           <Info

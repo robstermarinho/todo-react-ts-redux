@@ -3,6 +3,8 @@ import { TodoDetails } from './pages/TodoDetails'
 import { DefaultLayout } from './layouts/DefaultLayout'
 import { HomePage } from './pages/HomePage'
 import { CyclePage } from './pages/CyclePage'
+import { BlogPage } from './pages/BlogPage'
+import { PostsProvider } from './contexts/PostsContext'
 
 export function Router() {
   return (
@@ -11,6 +13,14 @@ export function Router() {
         <Route path="/" element={<HomePage />} />
         <Route path="/todo/:slug/" element={<TodoDetails />} />
         <Route path="/todo/:slug/cycle" element={<CyclePage />} />
+        <Route
+          path="/blog"
+          element={
+            <PostsProvider>
+              <BlogPage />
+            </PostsProvider>
+          }
+        />
       </Route>
     </Routes>
   )

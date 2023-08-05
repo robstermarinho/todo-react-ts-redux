@@ -14,6 +14,29 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.header .headerContent .headerMenu{
+
+  list-style-type: none ;
+  display: flex;
+  gap: 1rem;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.header .headerContent .headerMenu li:first-child{
+
+  padding: 0px 10px;
+}
+.header .headerContent .headerMenu li a{
+  color: var(--gray-100);
+  text-decoration: none;
+  font-size: 12px;
+}
+.header .headerContent .headerMenu li a:hover{
+  color: var(--gray-50);
+}
+
 .header .headerContent .infoContainer{
   display: flex;
   flex-direction: column;
