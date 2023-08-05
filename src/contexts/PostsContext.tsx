@@ -18,7 +18,7 @@ interface PostInput {
 
 interface PostsContextProps {
   posts: Post[]
-  status: 'idle' | 'loading' | 'error' | 'deleting'
+  status: 'idle' | 'loading' | 'error' | 'deleting' | 'creating'
   error: string | null
   fetchPosts: (isPublished?: boolean, query?: string) => Promise<void>
   createPost: (data: PostInput) => Promise<void>
@@ -37,7 +37,7 @@ export const PostsContext = createContext({} as PostsContextProps)
 export function PostsProvider({ children }: PostsProviderProps) {
   const [posts, setPosts] = useState<Post[]>([])
   const [status, setStatus] = useState<
-    'idle' | 'loading' | 'error' | 'deleting'
+    'idle' | 'loading' | 'error' | 'deleting' | 'creating'
   >('idle')
   const [error, setError] = useState<string | null>(null)
 
@@ -77,15 +77,28 @@ export function PostsProvider({ children }: PostsProviderProps) {
    * @param data
    */
   const createPost = useCallback(async (data: PostInput) => {
+    setStatus('creating')
+
     const { title, body } = data
-    const response = await api.post('posts', {
-      title,
-      body,
-      isPublished: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-    setPosts((state) => [response.data, ...state])
+
+    try {
+      const response = await api.post('posts', {
+        title,
+        body,
+        isPublished: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+
+      await fetchPosts(true)
+
+      toast.success('Post created successfully.')
+    } catch (e) {
+      console.log(e)
+      toast.error('Impossible to create post now.')
+    }
+
+    setStatus('idle')
   }, [])
 
   /**

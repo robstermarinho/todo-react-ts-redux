@@ -19,9 +19,12 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-
+  height: 100%;
+  width: 100%;
   justify-content: center;
+  position: absolute;
+  background-color: rgba(15, 15, 15, 0.8);
+  border-radius: 8px;
   h1 {
     font-size: 20px;
     color: var(--blue-dark);

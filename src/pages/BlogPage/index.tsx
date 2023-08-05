@@ -3,19 +3,18 @@ import { BlogPageContainer } from './styles'
 import { PostsContext } from '../../contexts/PostsContext'
 import { formatDistanceToNow } from 'date-fns'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
-
+import { AddPostForm } from './components/addPostForm'
+import InitLoading from '../../components/InitLoading'
 export function BlogPage() {
   const { posts, status, error, deletePost } = useContext(PostsContext)
+  const isLoading = status === 'loading'
+  const isRemoving = status === 'deleting'
 
   const handleRemovePost = (postId: string) => {
     deletePost(postId)
   }
 
   const renderPosts = () => {
-    if (status === 'loading') {
-      return <p>Loading....</p>
-    }
-
     if (!error && posts && posts.length === 0) {
       return <p>No posts found.</p>
     }
@@ -49,8 +48,8 @@ export function BlogPage() {
             title="Remove Post"
             question="Are you sure you want to remove this post?"
             targetName={post.title}
-            disabled={status === 'deleting'}
-            buttonLabel={status === 'deleting' ? 'Removing...' : 'Remove'}
+            disabled={isRemoving}
+            buttonLabel={isRemoving ? 'Removing...' : 'Remove'}
           />
         </div>
       </div>
@@ -58,7 +57,10 @@ export function BlogPage() {
   }
   return (
     <BlogPageContainer>
+      <AddPostForm />
       {error && <p>{error}</p>}
+      {isLoading && <InitLoading />}
+      {isRemoving && <InitLoading msg="Removing post" />}
       <div className="postsList">{renderPosts()}</div>
     </BlogPageContainer>
   )

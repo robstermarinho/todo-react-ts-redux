@@ -1,11 +1,12 @@
-import React from 'react'
-
 import { Container } from './styles'
 
-const InitLoading: React.FC = () => {
+interface InitLoadingProps {
+  msg?: string
+}
+export function InitLoading({ msg }: InitLoadingProps) {
   return (
     <Container>
-      <h1>Loading...</h1>
+      <h1>{msg || 'Loading...'}</h1>
     </Container>
   )
 }
