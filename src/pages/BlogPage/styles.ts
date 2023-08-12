@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import * as Dialog from '@radix-ui/react-dialog'
 
 export const BlogPageContainer = styled.div`
   display: flex;
@@ -28,16 +29,40 @@ export const BlogPageContainer = styled.div`
       gap: 0.75rem;
     }
   }
+
+  .addPostButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: var(--blue-dark);
+    border: 1px solid var(--blue-dark);
+    transition: all 0.2s;
+    padding: 1rem;
+    color: var(--white);
+    margin-top: 10px;
+    svg {
+      color: var(--white);
+    }
+    span {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+    }
+  }
 `
 
 export const AddPostFormContainer = styled.section`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 0px 50px 0px 50px;
-
+  padding: 0px 50px 0px 50px; */
+  /* 
   form {
     width: 100%;
     display: flex;
@@ -102,5 +127,82 @@ export const AddPostFormContainer = styled.section`
         }
       }
     }
+  } */
+`
+
+export const Overlay = styled(Dialog.Overlay)`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+`
+
+export const Content = styled(Dialog.Content)`
+  min-width: 32rem;
+  border-radius: 6px;
+  padding: 2.5rem 3rem;
+  background: var(--gray-500);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  form {
+    margin-top: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    input,
+    textarea {
+      border-radius: 6px;
+      border: 0;
+      background: var(--gray-700);
+      color: var(--gray-200);
+      padding: 1rem;
+
+      &::placeholder {
+        color: var(--gray-300);
+      }
+    }
+
+    button[type='submit'] {
+      height: 50px;
+      border: 0;
+      background: var(--blue-dark);
+      color: var(--white);
+      font-weight: bold;
+      padding: 0 1.25rem;
+      border-radius: 6px;
+      margin-top: 1.25rem;
+      cursor: pointer;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      &:not(:disabled):hover {
+        background: var(--blue);
+        transition: background-color 0.2s;
+      }
+    }
   }
+`
+
+export const CloseButton = styled(Dialog.Close)`
+  position: absolute;
+  background: transparent;
+  border: 0;
+  top: 1.5rem;
+  right: 1.5rem;
+  line-height: 0;
+  cursor: pointer;
+  color: var(--gray-300);
 `
