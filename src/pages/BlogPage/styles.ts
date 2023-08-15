@@ -1,5 +1,14 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import * as Dialog from '@radix-ui/react-dialog'
+
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`
 
 export const BlogPageContainer = styled.div`
   display: flex;
@@ -27,30 +36,73 @@ export const BlogPageContainer = styled.div`
       padding: 1rem;
       border: 1px solid var(--gray-400);
       gap: 0.75rem;
+
+      .postInfo {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+        .postInfoContent {
+          display: flex;
+          justify-content: flex-start;
+          flex-direction: column;
+          gap: 0.2rem;
+          flex: 1;
+
+          h2 {
+            border-bottom: 1px solid var(--gray-400);
+            padding: 0.2rem 0px;
+            margin-bottom: 0.2rem;
+          }
+        }
+
+        .dateInfo {
+          display: flex;
+          justify-content: flex-end;
+          flex-direction: column;
+          gap: 0.2rem;
+          font-size: 12px;
+          width: 15%;
+          text-align: right;
+        }
+      }
     }
   }
 
-  .addPostButton {
+  .headerActions {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    border: none;
-    background-color: var(--blue-dark);
-    border: 1px solid var(--blue-dark);
-    transition: all 0.2s;
-    padding: 1rem;
-    color: var(--white);
-    margin-top: 10px;
-    svg {
+    max-width: 1200px;
+    margin: 0px auto;
+    flex-direction: column;
+  }
+  .postActions,
+  .headerActions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      border-radius: 0.25rem;
+      border: none;
+      background-color: var(--blue-dark);
+      border: 1px solid var(--blue-dark);
+      transition: all 0.2s;
+      padding: 0.5rem;
       color: var(--white);
-    }
-    span {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--white);
+
+      svg {
+        color: var(--white);
+      }
+      span {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--white);
+      }
     }
   }
 `
@@ -169,7 +221,14 @@ export const Content = styled(Dialog.Content)`
       }
     }
 
-    button[type='submit'] {
+    button.loadingButton {
+      svg {
+        animation: ${spin} 1.6ms linear infinite;
+      }
+    }
+
+    button[type='submit'],
+    button.loadingButton {
       height: 50px;
       border: 0;
       background: var(--blue-dark);

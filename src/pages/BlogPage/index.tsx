@@ -1,15 +1,13 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { BlogPageContainer } from './styles'
 import { PostsContext } from '../../contexts/PostsContext'
 import { formatDistanceToNow } from 'date-fns'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
-import { AddPostForm } from './components/addPostForm'
+import { PostForm } from './components/PostForm'
 import InitLoading from '../../components/InitLoading'
-import * as Dialog from '@radix-ui/react-dialog'
-import { PlusCircle } from 'phosphor-react'
+import { Pencil } from 'phosphor-react'
 
 export function BlogPage() {
-  const [open, setOpen] = useState(false)
   const { posts, status, error, deletePost } = useContext(PostsContext)
   const isLoading = status === 'loading'
   const isRemoving = status === 'deleting'
@@ -26,27 +24,35 @@ export function BlogPage() {
     return posts.map((post) => (
       <div className="post" key={post.id}>
         <div className="postInfo">
-          <h2>{post.title}</h2>
-          <p>{post.body}</p>
-        </div>
+          <div className="postInfoContent">
+            <h2>{post.title}</h2>
+            <p>{post.body}</p>
+          </div>
 
-        <div className="dateInfo">
-          <small>
-            Created:{' '}
-            {formatDistanceToNow(new Date(post.createdAt), {
-              addSuffix: true,
-            })}
-          </small>
+          <div className="dateInfo">
+            <small>
+              Created:{' '}
+              {formatDistanceToNow(new Date(post.createdAt), {
+                addSuffix: true,
+              })}
+            </small>
 
-          <small>
-            Updated:{' '}
-            {formatDistanceToNow(new Date(post.updatedAt), {
-              addSuffix: true,
-            })}
-          </small>
+            <small>
+              Updated:{' '}
+              {formatDistanceToNow(new Date(post.updatedAt), {
+                addSuffix: true,
+              })}
+            </small>
+          </div>
         </div>
 
         <div className="postActions">
+          <PostForm
+            key={`update-form-${post.id}`}
+            postData={post}
+            buttonLabel="Update Post"
+            btnIcon={<Pencil size={20} />}
+          />
           <ConfirmDialog
             onSuccess={() => handleRemovePost(post.id)}
             title="Remove Post"
@@ -61,16 +67,9 @@ export function BlogPage() {
   }
   return (
     <BlogPageContainer>
-      <Dialog.Root open={open} onOpenChange={setOpen}>
-        <Dialog.Trigger asChild>
-          <button className="addPostButton">
-            {' '}
-            <PlusCircle />
-            Add Post
-          </button>
-        </Dialog.Trigger>
-        <AddPostForm setOpen={setOpen} />
-      </Dialog.Root>
+      <div className="headerActions">
+        <PostForm buttonLabel="Create Post" />
+      </div>
 
       {error && <p>{error}</p>}
       {isLoading && <InitLoading />}
