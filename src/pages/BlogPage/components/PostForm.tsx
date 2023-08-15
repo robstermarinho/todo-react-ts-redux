@@ -54,9 +54,7 @@ export const PostForm = ({
         setId(postData.id)
         setTitle(postData.title)
         setContent(postData.body)
-      }
-
-      if (!isOpen) {
+      } else {
         setId(null)
         setTitle('')
         setContent('')
@@ -119,7 +117,7 @@ export const PostForm = ({
                   </button>
                 )}
                 {isSaving && (
-                  <button className='loadingButton' disabled type="button">
+                  <button className="loadingButton" disabled type="button">
                     <Spinner /> Saving...
                   </button>
                 )}

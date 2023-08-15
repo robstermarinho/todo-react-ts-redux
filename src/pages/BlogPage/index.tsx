@@ -54,6 +54,7 @@ export function BlogPage() {
             btnIcon={<Pencil size={20} />}
           />
           <ConfirmDialog
+            key={`delete-form-${post.id}`}
             onSuccess={() => handleRemovePost(post.id)}
             title="Remove Post"
             question="Are you sure you want to remove this post?"
