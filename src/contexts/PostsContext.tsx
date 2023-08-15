@@ -16,13 +16,19 @@ interface PostInput {
   body: string
 }
 
+export interface PostInputUpdate {
+  id: string
+  title: string
+  body: string
+}
+
 interface PostsContextProps {
   posts: Post[]
   status: 'idle' | 'loading' | 'error' | 'deleting' | 'creating'
   error: string | null
   fetchPosts: (isPublished?: boolean, query?: string) => Promise<void>
   createPost: (data: PostInput) => Promise<void>
-  updatePost: (data: PostInput) => Promise<void>
+  updatePost: (data: PostInputUpdate) => Promise<void>
   publishPost: (id: string) => Promise<void>
   unpublishPost: (id: string) => Promise<void>
   deletePost: (id: string) => Promise<void>
@@ -90,7 +96,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
         updatedAt: new Date(),
       })
 
-      await fetchPosts(true)
+      setPosts((state) => [response.data, ...state])
 
       toast.success('Post created successfully.')
     } catch (e) {
@@ -105,14 +111,23 @@ export function PostsProvider({ children }: PostsProviderProps) {
    * Update post
    * @param data
    */
-  const updatePost = useCallback(async (data: PostInput) => {
+  const updatePost = useCallback(async (data: PostInputUpdate) => {
     const { title, body } = data
-    const response = await api.put(`posts/${data.id}`, {
+    const response = await api.patch(`posts/${data.id}`, {
       title,
       body,
       updatedAt: new Date(),
     })
-    setPosts((state) => [response.data, ...state])
+
+    setPosts((state) =>
+      state.map((post) => {
+        if (post.id === data.id) {
+          return response.data
+        }
+        return post
+      }),
+    )
+    
   }, [])
 
   /**
