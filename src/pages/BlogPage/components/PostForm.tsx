@@ -1,7 +1,7 @@
 import { useContext, useState, useCallback } from 'react'
 import { PostInputUpdate, PostsContext } from '../../../contexts/PostsContext'
 import { toast } from 'react-toastify'
-import { PlusCircle, X, Spinner } from 'phosphor-react'
+import { PlusCircle, X, Spinner, FloppyDisk } from 'phosphor-react'
 import { AddPostFormContainer, CloseButton, Content, Overlay } from '../styles'
 import * as Dialog from '@radix-ui/react-dialog'
 
@@ -113,7 +113,7 @@ export const PostForm = ({
                     type="submit"
                     onClick={handleSavePost}
                   >
-                    <PlusCircle /> Save Post
+                    <FloppyDisk /> Save Post
                   </button>
                 )}
                 {isSaving && (

@@ -9,6 +9,7 @@ interface Post {
   isPublished: boolean
   createdAt: string
   updatedAt: string
+  publishedAt: string | null
 }
 
 interface PostInput {
@@ -24,7 +25,7 @@ export interface PostInputUpdate {
 
 interface PostsContextProps {
   posts: Post[]
-  status: 'idle' | 'loading' | 'error' | 'deleting' | 'creating'
+  status: 'idle' | 'loading' | 'error' | 'deleting' | 'creating' | 'updating'
   error: string | null
   fetchPosts: (isPublished?: boolean, query?: string) => Promise<void>
   createPost: (data: PostInput) => Promise<void>
@@ -43,7 +44,7 @@ export const PostsContext = createContext({} as PostsContextProps)
 export function PostsProvider({ children }: PostsProviderProps) {
   const [posts, setPosts] = useState<Post[]>([])
   const [status, setStatus] = useState<
-    'idle' | 'loading' | 'error' | 'deleting' | 'creating'
+    'idle' | 'loading' | 'error' | 'deleting' | 'creating' | 'updating'
   >('idle')
   const [error, setError] = useState<string | null>(null)
 
@@ -91,9 +92,10 @@ export function PostsProvider({ children }: PostsProviderProps) {
       const response = await api.post('posts', {
         title,
         body,
-        isPublished: true,
+        isPublished: false,
         createdAt: new Date(),
         updatedAt: new Date(),
+        publishedAt: null,
       })
 
       setPosts((state) => [response.data, ...state])
@@ -112,6 +114,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
    * @param data
    */
   const updatePost = useCallback(async (data: PostInputUpdate) => {
+    setStatus('updating')
     const { title, body } = data
     const response = await api.patch(`posts/${data.id}`, {
       title,
@@ -127,7 +130,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
         return post
       }),
     )
-    
+    setStatus('idle')
   }, [])
 
   /**
@@ -135,24 +138,18 @@ export function PostsProvider({ children }: PostsProviderProps) {
    * @param id
    */
   const publishPost = useCallback(async (id: string) => {
-    await api.put(
+    setStatus('updating')
+    await api.patch(
       `posts/${id}
     `,
       {
         isPublished: true,
+        publishedAt: new Date(),
       },
     )
-    setPosts((state) =>
-      state.map((post) => {
-        if (post.id === id) {
-          return {
-            ...post,
-            isPublished: true,
-          }
-        }
-        return post
-      }),
-    )
+
+    setPosts((state) => state.filter((post) => post.id !== id))
+    setStatus('idle')
   }, [])
 
   /**
@@ -160,24 +157,18 @@ export function PostsProvider({ children }: PostsProviderProps) {
    * @param id
    */
   const unpublishPost = useCallback(async (id: string) => {
-    await api.put(
+    setStatus('updating')
+    await api.patch(
       `posts/${id}
     `,
       {
         isPublished: false,
+        publishedAt: null,
       },
     )
-    setPosts((state) =>
-      state.map((post) => {
-        if (post.id === id) {
-          return {
-            ...post,
-            isPublished: false,
-          }
-        }
-        return post
-      }),
-    )
+
+    setPosts((state) => state.filter((post) => post.id !== id))
+    setStatus('idle')
   }, [])
 
   const deletePost = useCallback(async (id: string) => {

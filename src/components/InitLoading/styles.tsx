@@ -25,6 +25,7 @@ export const Container = styled.div`
   position: absolute;
   background-color: rgba(15, 15, 15, 0.8);
   border-radius: 8px;
+
   h1 {
     font-size: 20px;
     color: var(--blue-dark);

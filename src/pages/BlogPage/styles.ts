@@ -15,10 +15,10 @@ export const BlogPageContainer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 1200px;
-  margin: 0px auto;
+  margin: 2rem auto;
   flex-direction: column;
   position: relative;
-
+  padding: 2rem;
   h2 {
     margin-top: 10px;
   }
@@ -29,6 +29,7 @@ export const BlogPageContainer = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
     .post {
       width: 100%;
       display: flex;
@@ -117,8 +118,8 @@ export const BlogPageContainer = styled.div`
   .postActions {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-
+    justify-content: flex-start;
+    gap: 1rem;
     button {
       display: flex;
       justify-content: center;
@@ -247,6 +248,7 @@ export const CustomSwitch = styled.div`
   align-items: center;
 
   .SwitchRoot {
+    cursor: pointer;
     width: 42px;
     height: 25px;
     background-color: var(--gray-400);
@@ -256,6 +258,7 @@ export const CustomSwitch = styled.div`
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
   .SwitchRoot:focus {
+    cursor: pointer;
     box-shadow: 0 0 0 2px var(--gray-500);
   }
   .SwitchRoot[data-state='checked'] {
@@ -263,6 +266,7 @@ export const CustomSwitch = styled.div`
   }
 
   .SwitchThumb {
+    cursor: pointer;
     display: block;
     width: 21px;
     height: 21px;
@@ -274,10 +278,12 @@ export const CustomSwitch = styled.div`
     will-change: transform;
   }
   .SwitchThumb[data-state='checked'] {
+    cursor: pointer;
     transform: translateX(19px);
   }
 
   .Label {
+    cursor: pointer;
     color: white;
     font-size: 15px;
     line-height: 1;
