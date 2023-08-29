@@ -1,19 +1,27 @@
-import { useContext } from 'react'
-import { BlogPageContainer } from './styles'
+import { useContext, useState } from 'react'
+import { BlogPageContainer, CustomSwitch } from './styles'
 import { PostsContext } from '../../contexts/PostsContext'
 import { formatDistanceToNow } from 'date-fns'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
 import { PostForm } from './components/PostForm'
 import InitLoading from '../../components/InitLoading'
 import { Pencil } from 'phosphor-react'
+import * as Switch from '@radix-ui/react-switch'
 
 export function BlogPage() {
-  const { posts, status, error, deletePost } = useContext(PostsContext)
+  const [showPublished, setShowPublished] = useState(true)
+  const { posts, status, error, deletePost, fetchPosts } =
+    useContext(PostsContext)
+
   const isLoading = status === 'loading'
   const isRemoving = status === 'deleting'
 
   const handleRemovePost = (postId: string) => {
     deletePost(postId)
+  }
+  const handleOnCheckChange = (state: boolean) => {
+    fetchPosts(state)
+    setShowPublished(state)
   }
 
   const renderPosts = () => {
@@ -68,8 +76,23 @@ export function BlogPage() {
   }
   return (
     <BlogPageContainer>
+      <h2>{showPublished ? 'Blog Posts' : 'Draft Posts'}</h2>
       <div className="headerActions">
-        <PostForm buttonLabel="Create Post" />
+        <CustomSwitch>
+          <label className="Label" htmlFor="published-posts">
+            Published Posts
+          </label>
+          <Switch.Root
+            className="SwitchRoot"
+            id="published-posts"
+            onCheckedChange={handleOnCheckChange}
+            defaultChecked={showPublished}
+          >
+            <Switch.Thumb className="SwitchThumb" />
+          </Switch.Root>
+        </CustomSwitch>
+
+        <PostForm buttonLabel="Create Post" disabled={!showPublished} />
       </div>
 
       {error && <p>{error}</p>}

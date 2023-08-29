@@ -78,7 +78,7 @@ export const PostForm = ({
         <Overlay />
 
         <Content>
-          <Dialog.Title>New Post</Dialog.Title>
+          <Dialog.Title>{id ? 'Update Post' : 'New Post'}</Dialog.Title>
 
           <CloseButton>
             <X size={24} />

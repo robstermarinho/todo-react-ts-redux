@@ -19,6 +19,10 @@ export const BlogPageContainer = styled.div`
   flex-direction: column;
   position: relative;
 
+  h2 {
+    margin-top: 10px;
+  }
+
   .postsList {
     margin-top: 10px;
     display: flex;
@@ -72,11 +76,45 @@ export const BlogPageContainer = styled.div`
   .headerActions {
     display: flex;
     max-width: 1200px;
-    margin: 0px auto;
-    flex-direction: column;
+    margin: 10px auto 0px auto;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+    button.dialogConfirmButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      border-radius: 0.25rem;
+      border: none;
+      background-color: var(--blue-dark);
+      border: 1px solid var(--blue-dark);
+      transition: all 0.2s;
+      padding: 0.5rem;
+      color: var(--white);
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      svg {
+        color: var(--white);
+      }
+      span {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--white);
+      }
+      &:hover {
+        background-color: var(--blue);
+        border: 1px solid var(--blue);
+      }
+    }
   }
-  .postActions,
-  .headerActions {
+  .postActions {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -95,6 +133,11 @@ export const BlogPageContainer = styled.div`
       padding: 0.5rem;
       color: var(--white);
 
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
       svg {
         color: var(--white);
       }
@@ -103,84 +146,15 @@ export const BlogPageContainer = styled.div`
         font-weight: 700;
         color: var(--white);
       }
+      &:hover {
+        background-color: var(--blue);
+        border: 1px solid var(--blue);
+      }
     }
   }
 `
 
-export const AddPostFormContainer = styled.section`
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 0px 50px 0px 50px; */
-  /* 
-  form {
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-
-    color: var(--gray-300);
-    font-size: 1.125rem;
-    font-weight: bold;
-
-    background-color: var(--gray-500);
-    border-radius: 0.25rem;
-    border: 1px solid var(--gray-700);
-    padding: 0 1rem;
-
-    width: 100%;
-    padding: 20px;
-    gap: 0.5rem;
-
-    input,
-    textarea {
-      background: transparent;
-      height: 2.5rem;
-      border: 0;
-      border-bottom: 1px solid var(--gray-400);
-      font-weight: bold;
-      font-size: 1.125rem;
-      padding: 0 0.5rem;
-      color: var(--gray-100);
-      &:focus {
-        box-shadow: none;
-        outline: 0;
-        border-bottom: 1px solid var(--gray-300);
-      }
-      &::placeholder {
-        color: var(--gray-500);
-      }
-    }
-
-    textarea {
-      flex: 1;
-      min-height: 8rem;
-    }
-    button {
-      border: 0;
-      background: transparent;
-
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      text-decoration: none;
-      gap: 0.2rem;
-      padding: 10px 0px;
-      color: var(--gray-300);
-      border-radius: 8px;
-      transition: color 0.2s ease-in-out;
-      cursor: pointer;
-      &:hover {
-        color: var(--blue);
-        span {
-          color: var(--blue);
-        }
-      }
-    }
-  } */
-`
+export const AddPostFormContainer = styled.section``
 
 export const Overlay = styled(Dialog.Overlay)`
   position: fixed;
@@ -191,7 +165,7 @@ export const Overlay = styled(Dialog.Overlay)`
 `
 
 export const Content = styled(Dialog.Content)`
-  min-width: 32rem;
+  min-width: 62rem;
   border-radius: 6px;
   padding: 2.5rem 3rem;
   background: var(--gray-500);
@@ -203,11 +177,12 @@ export const Content = styled(Dialog.Content)`
 
   form {
     margin-top: 2rem;
-
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
+    textarea {
+      min-height: 200px;
+    }
     input,
     textarea {
       border-radius: 6px;
@@ -242,6 +217,7 @@ export const Content = styled(Dialog.Content)`
       display: flex;
       justify-content: center;
       gap: 0.5rem;
+
       &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
@@ -264,4 +240,47 @@ export const CloseButton = styled(Dialog.Close)`
   line-height: 0;
   cursor: pointer;
   color: var(--gray-300);
+`
+
+export const CustomSwitch = styled.div`
+  display: flex;
+  align-items: center;
+
+  .SwitchRoot {
+    width: 42px;
+    height: 25px;
+    background-color: var(--gray-400);
+    border-radius: 9999px;
+    position: relative;
+    box-shadow: 0 2px 10px var(--gray-600);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  .SwitchRoot:focus {
+    box-shadow: 0 0 0 2px var(--gray-500);
+  }
+  .SwitchRoot[data-state='checked'] {
+    background-color: var(--blue);
+  }
+
+  .SwitchThumb {
+    display: block;
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 9999px;
+    box-shadow: 0 2px 2px var(--gray-300);
+    transition: transform 100ms;
+    transform: translateX(2px);
+    will-change: transform;
+  }
+  .SwitchThumb[data-state='checked'] {
+    transform: translateX(19px);
+  }
+
+  .Label {
+    color: white;
+    font-size: 15px;
+    line-height: 1;
+    padding-right: 15px;
+  }
 `
