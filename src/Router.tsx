@@ -5,6 +5,7 @@ import { HomePage } from './pages/HomePage'
 import { CyclePage } from './pages/CyclePage'
 import { BlogPage } from './pages/BlogPage'
 import { PostsProvider } from './contexts/PostsContext'
+import { BlogReduxPage } from './pages/BlogPage/BlogReduxPage'
 
 export function Router() {
   return (
@@ -21,6 +22,7 @@ export function Router() {
             </PostsProvider>
           }
         />
+        <Route path="redux/blog" element={<BlogReduxPage />} />
       </Route>
     </Routes>
   )

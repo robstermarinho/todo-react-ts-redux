@@ -2,7 +2,7 @@ import { createContext, useCallback, useEffect, useState } from 'react'
 import { api } from '../services/axios'
 import { toast } from 'react-toastify'
 
-interface Post {
+export interface Post {
   id: string
   title: string
   body: string
@@ -50,6 +50,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
 
   /**
    * Fetch posts
+   * @param isPublished
    * @param query
    */
   const fetchPosts = useCallback(

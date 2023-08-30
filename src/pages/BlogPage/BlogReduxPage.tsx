@@ -1,42 +1,58 @@
-import { useContext, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
+import {
+  selectPosts,
+  fetchPosts,
+  selectPostsError,
+  selectPostsStatus,
+} from '../../redux/reducers/postSlice'
 import { BlogPageContainer, CustomSwitch } from './styles'
-import { PostsContext } from '../../contexts/PostsContext'
-import { formatDistanceToNow } from 'date-fns'
-import { ConfirmDialog } from '../../components/ConfirmDialog'
-import { PostForm } from './components/PostForm'
 import InitLoading from '../../components/InitLoading'
 import { Pencil, ArrowBendUpRight, ArrowBendLeftDown } from 'phosphor-react'
 import * as Switch from '@radix-ui/react-switch'
-
-export function BlogPage() {
+import { PostForm } from './components/PostForm'
+import { formatDistanceToNow } from 'date-fns'
+import { ConfirmDialog } from '../../components/ConfirmDialog'
+export function BlogReduxPage() {
   const [showPublished, setShowPublished] = useState(true)
-  const {
-    posts,
-    status,
-    error,
-    deletePost,
-    fetchPosts,
-    unpublishPost,
-    publishPost,
-  } = useContext(PostsContext)
+
+  const error = useSelector(selectPostsError)
+  const status = useSelector(selectPostsStatus)
+  const posts = useSelector(selectPosts)
+  const dispatch = useDispatch()
 
   const isLoading = status === 'loading'
   const isRemoving = status === 'deleting'
   const isUpdating = status === 'updating'
 
+  useEffect(() => {
+    dispatch<any>(
+      fetchPosts({
+        isPublished: true,
+        query: '',
+      }),
+    )
+  }, [dispatch])
+
   const handleRemovePost = (postId: string) => {
-    deletePost(postId)
+    // TODO
   }
 
   const handlePublishPost = (postId: string) => {
-    publishPost(postId)
+    // TODO
   }
 
   const handleUnpublishPost = (postId: string) => {
-    unpublishPost(postId)
+    // TODO
   }
+
   const handleOnCheckChange = (state: boolean) => {
-    fetchPosts(state)
+    dispatch<any>(
+      fetchPosts({
+        isPublished: state,
+        query: '',
+      }),
+    )
     setShowPublished(state)
   }
 
@@ -80,7 +96,7 @@ export function BlogPage() {
 
         {!post.isPublished && (
           <div className="postActions">
-            <PostForm
+            {/* <PostForm
               key={`update-form-${post.id}`}
               postData={post}
               buttonLabel="Update Post"
@@ -104,12 +120,12 @@ export function BlogPage() {
               targetName={post.title}
               disabled={isRemoving}
               buttonLabel={isRemoving ? 'Removing...' : 'Remove'}
-            />
+            /> */}
           </div>
         )}
         {post.isPublished && (
           <div className="postActions">
-            <ConfirmDialog
+            {/* <ConfirmDialog
               key={`unpublish-form-${post.id}`}
               onSuccess={() => handleUnpublishPost(post.id)}
               title="Unpublish Post"
@@ -118,7 +134,7 @@ export function BlogPage() {
               targetName={post.title}
               disabled={isUpdating}
               buttonLabel={isUpdating ? 'Unpublishing...' : 'Unpublish'}
-            />
+            /> */}
           </div>
         )}
       </div>
@@ -126,7 +142,7 @@ export function BlogPage() {
   }
   return (
     <BlogPageContainer>
-      <h1>React Context</h1>
+      <h1>Redux with AsyncTunk</h1>
       <h2>{showPublished ? 'Blog Posts' : 'Draft Posts'}</h2>
 
       <div className="headerActions">
@@ -144,9 +160,9 @@ export function BlogPage() {
           </Switch.Root>
         </CustomSwitch>
 
-        {!showPublished && (
+        {/* {!showPublished && (
           <PostForm buttonLabel="Create Post" disabled={showPublished} />
-        )}
+        )} */}
       </div>
 
       {error && <p>{error}</p>}
