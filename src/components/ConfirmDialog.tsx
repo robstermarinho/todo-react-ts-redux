@@ -54,7 +54,7 @@ export function ConfirmDialog({
           </Dialog.Close>
           <Dialog.Description className={styles.AlertDialogDescription}>
             {targetName && <h4>{targetName}</h4>}
-            <p>{question}</p>
+            {question && <p>{question}</p>}
             {body}
           </Dialog.Description>
           <div className={styles.buttonsContainer}>
