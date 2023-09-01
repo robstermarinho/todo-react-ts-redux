@@ -2,8 +2,8 @@
   "posts": [
     {
       "id": 1,
-      "title": "Learn React",
-      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl quis tincidunt ultricies, nunc nisl aliquam nunc, sit amet lacinia nisl",
+      "title": "Mastering React Development",
+      "body": "In the world of modern web development, mastering React is essential. Explore the intricacies of this powerful framework and unlock new possibilities.",
       "isPublished": false,
       "createdAt": "2019-01-01T00:00:00.000Z",
       "updatedAt": "2019-01-01T00:00:00.000Z",
@@ -11,12 +11,112 @@
     },
     {
       "id": 2,
-      "title": "Learn React 2",
-      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl quis tincidunt ultricies, nunc nisl aliquam nunc, sit amet lacinia nisl",
+      "title": "The Art of Learning React 2",
+      "body": "Delve into the fascinating world of React development. Understand its core concepts and unleash your creativity in building web applications.",
       "isPublished": true,
       "createdAt": "2018-01-01T00:00:00.000Z",
       "updatedAt": "2023-08-30T19:34:47.853Z",
       "publishedAt": "2023-09-01T03:15:01.999Z"
+    },
+
+    {
+      "id": 3,
+      "title": "The Power of JavaScript",
+      "body": "Explore the limitless possibilities of JavaScript and its role in modern web development. Dive into the world of functions, objects, and libraries.",
+      "isPublished": false,
+      "createdAt": "2022-05-15T12:45:00.000Z",
+      "updatedAt": "2023-08-30T15:22:59.123Z",
+      "publishedAt": null
+    },
+    {
+      "id": 4,
+      "title": "Building Scalable APIs with Node.js",
+      "body": "Learn the art of designing and building scalable APIs using Node.js. Discover best practices, routing, and middleware to create robust backends.",
+      "isPublished": true,
+      "createdAt": "2021-11-20T09:10:00.000Z",
+      "updatedAt": "2023-08-29T14:18:45.789Z",
+      "publishedAt": "2023-09-01T08:15:00.777Z"
+    },
+    {
+      "id": 5,
+      "title": "Exploring the Future of Web Development",
+      "body": "Discover the future of web development with cutting-edge technologies and strategies. Join us as we explore the latest trends and innovations.",
+      "isPublished": false,
+      "createdAt": "2023-09-01T03:24:18.074Z",
+      "updatedAt": "2023-09-01T03:24:18.074Z",
+      "publishedAt": null
+    },
+    {
+      "id": 6,
+      "title": "Mastering Frontend Development",
+      "body": "Embark on a journey to master the art of frontend development. Dive into HTML, CSS, and JavaScript to create stunning and responsive web interfaces.",
+      "isPublished": true,
+      "createdAt": "2022-08-10T16:30:00.000Z",
+      "updatedAt": "2023-08-30T10:45:30.456Z",
+      "publishedAt": "2023-09-01T11:00:00.888Z"
+    },
+    {
+      "id": 7,
+      "title": "The Future of Artificial Intelligence",
+      "body": "Get a glimpse into the future of AI and its impact on society. Explore machine learning, deep learning, and the potential applications of AI.",
+      "isPublished": true,
+      "createdAt": "2023-03-05T08:20:00.000Z",
+      "updatedAt": "2023-08-31T20:55:15.321Z",
+      "publishedAt": "2023-09-01T14:45:00.222Z"
+    },
+    {
+      "id": 8,
+      "title": "Web Security Best Practices",
+      "body": "Secure your web applications with the latest security best practices. Learn about encryption, authentication, and protecting your users' data.",
+      "isPublished": true,
+      "createdAt": "2022-09-25T14:15:00.000Z",
+      "updatedAt": "2023-08-30T12:12:34.567Z",
+      "publishedAt": "2023-09-01T12:30:00.111Z"
+    },
+    {
+      "id": 9,
+      "title": "Creating Stunning User Interfaces",
+      "body": "Design visually appealing user interfaces that captivate your audience. Explore the principles of UI/UX design and enhance user experiences.",
+      "isPublished": false,
+      "createdAt": "2023-01-10T11:55:00.000Z",
+      "updatedAt": "2023-08-29T18:40:21.234Z",
+      "publishedAt": null
+    },
+    {
+      "id": 10,
+      "title": "Python: The Swiss Army Knife of Programming",
+      "body": "Unleash the power of Python in your programming journey. From web development to data analysis, Python is the versatile tool you need.",
+      "isPublished": true,
+      "createdAt": "2022-07-15T17:30:00.000Z",
+      "updatedAt": "2023-08-31T09:57:42.345Z",
+      "publishedAt": "2023-09-01T16:15:00.444Z"
+    },
+    {
+      "id": 11,
+      "title": "Exploring the World of Blockchain",
+      "body": "Dive into the decentralized world of blockchain technology. Discover the concepts behind cryptocurrencies and smart contracts.",
+      "isPublished": false,
+      "createdAt": "2022-10-18T13:20:00.000Z",
+      "updatedAt": "2023-08-30T17:28:56.789Z",
+      "publishedAt": null
+    },
+    {
+      "id": 12,
+      "title": "The Art of Data Visualization",
+      "body": "Transform data into compelling visual stories. Explore the tools and techniques for creating effective data visualizations that inform and inspire.",
+      "isPublished": false,
+      "createdAt": "2023-02-22T10:10:00.000Z",
+      "updatedAt": "2023-08-31T15:15:55.432Z",
+      "publishedAt": null
+    },
+    {
+      "id": 13,
+      "title": "Mastering Mobile App Development",
+      "body": "Build cross-platform mobile apps with ease. Dive into frameworks like React Native and Flutter to create high-quality mobile experiences.",
+      "isPublished": true,
+      "createdAt": "2022-12-05T15:45:00.000Z",
+      "updatedAt": "2023-08-30T20:20:00.888Z",
+      "publishedAt": "2023-09-01T20:00:00.999Z"
     }
   ]
 }
