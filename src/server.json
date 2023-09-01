@@ -4,17 +4,19 @@
       "id": 1,
       "title": "Learn React",
       "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl quis tincidunt ultricies, nunc nisl aliquam nunc, sit amet lacinia nisl",
-      "isPublished": true,
+      "isPublished": false,
       "createdAt": "2019-01-01T00:00:00.000Z",
-      "updatedAt": "2019-01-01T00:00:00.000Z"
+      "updatedAt": "2019-01-01T00:00:00.000Z",
+      "publishedAt": null
     },
     {
       "id": 2,
       "title": "Learn React 2",
       "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl quis tincidunt ultricies, nunc nisl aliquam nunc, sit amet lacinia nisl",
-      "isPublished": false,
+      "isPublished": true,
       "createdAt": "2018-01-01T00:00:00.000Z",
-      "updatedAt": "2023-08-30T19:34:47.853Z"
+      "updatedAt": "2023-08-30T19:34:47.853Z",
+      "publishedAt": "2023-09-01T03:15:01.999Z"
     }
   ]
 }

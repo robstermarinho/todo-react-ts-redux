@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { CyclesState } from '../../@types/cycle'
 import { v4 as uid } from 'uuid'
 import { reducerStateType } from '../store'
@@ -106,8 +106,14 @@ export const selectIsTaskInActiveCycle = (
 export const selectAmountSecondsPassed = (state: reducerStateType) =>
   state.cycles.amountSecondsPassed
 
-export const selecTaskCycles = (state: reducerStateType, task: TaskType) => {
+export const TaskCyclesSelector = (state: reducerStateType, task: TaskType) => {
   return state.cycles.cycles.filter((cycle) => cycle.taskId === task.id)
 }
+
+// Memorized version of selectTaskCycles
+export const selecTaskCycles = createSelector(
+  TaskCyclesSelector,
+  (cycles) => cycles,
+)
 
 export default cycleSlice.reducer

@@ -52,11 +52,12 @@ export function ConfirmDialog({
           <Dialog.Close className={styles.AlertDialogClose}>
             <X />
           </Dialog.Close>
-          <Dialog.Description className={styles.AlertDialogDescription}>
+
+          <Dialog.Content className={styles.AlertDialogDescription}>
             {targetName && <h4>{targetName}</h4>}
             {question && <p>{question}</p>}
             {body}
-          </Dialog.Description>
+          </Dialog.Content>
           <div className={styles.buttonsContainer}>
             <Dialog.Close asChild>
               <button className={styles.modalCancel}>
