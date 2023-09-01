@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import { Post } from '../../contexts/PostsContext'
 import { api } from '../../services/axios'
 import { reducerStateType } from '../store'
@@ -19,6 +19,7 @@ export interface PostsFetchParams {
   isPublished: boolean
   query: string | null
 }
+
 /**
  * Fetch posts with async thunk
  * @param isPublished
@@ -40,13 +41,25 @@ export const fetchPosts = createAsyncThunk(
 )
 export type FetchPostsAction = ReturnType<typeof fetchPosts>
 
+/**
+ * Delete post with async thunk
+ */
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async (postId: string) => {
+    await api.delete(`posts/${postId}`)
+    return postId
+  },
+)
+export type DeletePostAction = ReturnType<typeof deletePost>
+
 export const postSlice = createSlice({
   name: 'post',
   initialState: initialPostsReducerState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPosts.pending, (state: PostsState, action) => {
+      .addCase(fetchPosts.pending, (state: PostsState) => {
         state.status = 'loading'
         state.error = null
       })
@@ -55,10 +68,24 @@ export const postSlice = createSlice({
         state.posts = action.payload
         state.error = null
       })
-      .addCase(fetchPosts.rejected, (state: PostsState, action) => {
+      .addCase(fetchPosts.rejected, (state: PostsState) => {
         state.status = 'error'
         state.error = 'Impossible to load posts now.'
         state.posts = []
+      })
+      // Delete Post
+      .addCase(deletePost.pending, (state: PostsState) => {
+        state.status = 'deleting'
+        state.error = null
+      })
+      .addCase(deletePost.fulfilled, (state: PostsState, action) => {
+        state.status = 'idle'
+        state.error = null
+        state.posts = state.posts.filter((post) => post.id !== action.payload)
+      })
+      .addCase(deletePost.rejected, (state: PostsState) => {
+        state.status = 'error'
+        state.error = 'Impossible to delete post now.'
       })
   },
 })
@@ -70,5 +97,11 @@ export const postSlice = createSlice({
 export const selectPostsStatus = (state: reducerStateType) => state.posts.status
 export const selectPosts = (state: reducerStateType) => state.posts.posts
 export const selectPostsError = (state: reducerStateType) => state.posts.error
+
+// Memorized version of selectPosts
+export const selecPostsLength = createSelector(
+  selectPosts,
+  (posts) => posts.length,
+)
 
 export default postSlice.reducer

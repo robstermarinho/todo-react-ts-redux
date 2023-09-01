@@ -148,6 +148,11 @@ export function BlogPage() {
           <PostForm buttonLabel="Create Post" disabled={showPublished} />
         )}
       </div>
+      <div className="headerActions">
+        <p>
+          {posts.length} {showPublished ? 'Blog Posts' : 'Draft Posts'}
+        </p>
+      </div>
 
       {error && <p>{error}</p>}
       {isLoading && <InitLoading />}

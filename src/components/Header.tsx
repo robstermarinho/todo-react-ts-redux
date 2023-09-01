@@ -4,7 +4,6 @@ import { Info } from './Info'
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import {
-  selectActiveCycleId,
   selectActiveTaskId,
   selectNumberOfPreviousCycles,
 } from '../redux/reducers/cycleSlice'
@@ -21,6 +20,7 @@ export function Header() {
   const activeTodo = useSelector((state: reducerStateType) =>
     selectActiveTodoByTaskId(state, activeTaskId),
   )
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>

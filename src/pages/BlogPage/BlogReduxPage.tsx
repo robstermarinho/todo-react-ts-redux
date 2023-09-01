@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import {
   selectPosts,
   fetchPosts,
+  deletePost,
   selectPostsError,
   selectPostsStatus,
 } from '../../redux/reducers/postSlice'
@@ -13,6 +14,7 @@ import * as Switch from '@radix-ui/react-switch'
 import { PostForm } from './components/PostForm'
 import { formatDistanceToNow } from 'date-fns'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
+import { Info } from '../../components/Info'
 export function BlogReduxPage() {
   const [showPublished, setShowPublished] = useState(true)
 
@@ -35,7 +37,7 @@ export function BlogReduxPage() {
   }, [dispatch])
 
   const handleRemovePost = (postId: string) => {
-    // TODO
+    dispatch<any>(deletePost(postId))
   }
 
   const handlePublishPost = (postId: string) => {
@@ -111,7 +113,7 @@ export function BlogReduxPage() {
               disabled={isUpdating}
               btnIcon={<ArrowBendUpRight size={20} />}
               buttonLabel={isUpdating ? 'Publishing...' : 'Publish'}
-            />
+            /> */}
             <ConfirmDialog
               key={`delete-form-${post.id}`}
               onSuccess={() => handleRemovePost(post.id)}
@@ -120,7 +122,7 @@ export function BlogReduxPage() {
               targetName={post.title}
               disabled={isRemoving}
               buttonLabel={isRemoving ? 'Removing...' : 'Remove'}
-            /> */}
+            />
           </div>
         )}
         {post.isPublished && (
@@ -163,6 +165,11 @@ export function BlogReduxPage() {
         {/* {!showPublished && (
           <PostForm buttonLabel="Create Post" disabled={showPublished} />
         )} */}
+      </div>
+      <div className="headerActions">
+        <p>
+          {posts.length} {showPublished ? 'Blog Posts' : 'Draft Posts'}
+        </p>
       </div>
 
       {error && <p>{error}</p>}
