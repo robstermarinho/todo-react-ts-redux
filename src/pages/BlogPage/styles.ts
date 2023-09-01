@@ -82,7 +82,8 @@ export const BlogPageContainer = styled.div`
     justify-content: space-between;
     width: 100%;
 
-    button.dialogConfirmButton {
+    button.dialogConfirmButton,
+    button.btn {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -115,6 +116,7 @@ export const BlogPageContainer = styled.div`
       }
     }
   }
+
   .postActions {
     width: 100%;
     display: flex;

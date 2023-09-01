@@ -56,7 +56,25 @@ export type DeletePostAction = ReturnType<typeof deletePost>
 export const postSlice = createSlice({
   name: 'post',
   initialState: initialPostsReducerState,
-  reducers: {},
+  reducers: {
+    // Middleware thunk reducers
+    syncPosts: (state: PostsState, action) => {
+      state.status = 'idle'
+      state.posts = action.payload
+      state.error = null
+    },
+    setIsLoading: (state: PostsState) => {
+      state.status = 'loading'
+      state.error = null
+    },
+    setIsError: (state: PostsState, action) => {
+      state.status = 'error'
+      state.error = action.payload
+      state.posts = []
+    },
+  },
+
+  // Async thunk extra reducers
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state: PostsState) => {
@@ -73,7 +91,7 @@ export const postSlice = createSlice({
         state.error = 'Impossible to load posts now.'
         state.posts = []
       })
-      // Delete Post
+
       .addCase(deletePost.pending, (state: PostsState) => {
         state.status = 'deleting'
         state.error = null
@@ -91,9 +109,13 @@ export const postSlice = createSlice({
 })
 
 /**
+ * Actions
+ */
+export const { syncPosts, setIsLoading, setIsError } = postSlice.actions
+
+/**
  * Selectors
  */
-
 export const selectPostsStatus = (state: reducerStateType) => state.posts.status
 export const selectPosts = (state: reducerStateType) => state.posts.posts
 export const selectPostsError = (state: reducerStateType) => state.posts.error

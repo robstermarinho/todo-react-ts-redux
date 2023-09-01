@@ -6,15 +6,18 @@ import {
   deletePost,
   selectPostsError,
   selectPostsStatus,
+  PostsFetchParams,
+  setIsLoading,
+  syncPosts,
+  setIsError,
 } from '../../redux/reducers/postSlice'
 import { BlogPageContainer, CustomSwitch } from './styles'
 import InitLoading from '../../components/InitLoading'
-import { Pencil, ArrowBendUpRight, ArrowBendLeftDown } from 'phosphor-react'
 import * as Switch from '@radix-ui/react-switch'
-import { PostForm } from './components/PostForm'
 import { formatDistanceToNow } from 'date-fns'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
-import { Info } from '../../components/Info'
+import { api } from '../../services/axios'
+
 export function BlogReduxPage() {
   const [showPublished, setShowPublished] = useState(true)
 
@@ -25,7 +28,6 @@ export function BlogReduxPage() {
 
   const isLoading = status === 'loading'
   const isRemoving = status === 'deleting'
-  const isUpdating = status === 'updating'
 
   useEffect(() => {
     dispatch<any>(
@@ -35,6 +37,34 @@ export function BlogReduxPage() {
       }),
     )
   }, [dispatch])
+
+  /**
+   * Example of how to use redux tunk middleware with async logic outside of the redux slice
+   * @param data
+   * @returns
+   */
+  const fetchPostsWithReduxTunk = (data: PostsFetchParams) => {
+    return async (dispatch: any, getState: any) => {
+      console.log(getState(), 'CURRENT STATE ')
+      dispatch(setIsLoading())
+
+      try {
+        const response = await api.get('posts', {
+          params: {
+            _sort: 'createdAt',
+            _order: 'desc',
+            isPublished: data.isPublished,
+            q: data.query ?? null,
+          },
+        })
+        dispatch(syncPosts(response.data))
+      } catch (e) {
+        dispatch(
+          setIsError('Impossible to load posts with tunk middleware now...'),
+        )
+      }
+    }
+  }
 
   const handleRemovePost = (postId: string) => {
     dispatch<any>(deletePost(postId))
@@ -165,6 +195,20 @@ export function BlogReduxPage() {
         {/* {!showPublished && (
           <PostForm buttonLabel="Create Post" disabled={showPublished} />
         )} */}
+        <button
+          className="btn"
+          type="button"
+          onClick={() => {
+            dispatch<any>(
+              fetchPostsWithReduxTunk({
+                isPublished: showPublished,
+                query: '',
+              }),
+            )
+          }}
+        >
+          Fetch posts using tunk middleware
+        </button>
       </div>
       <div className="headerActions">
         <p>
