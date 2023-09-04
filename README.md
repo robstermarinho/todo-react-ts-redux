@@ -5,27 +5,25 @@
 </p>
 <br/>
 
-## Built with:
+### APP1: Todo App
 
-- React & TypeScript
-- Redux Toolkit, Redux Persist, AsyncThunk & Thunk middleware
-- Redux RTK Query
+A Todo app that allows users to manage todo lists and tasks.
+Also, It allows users to start a task timer for todo tasks.
 
-### Todo App
+### APP2: Blog API + React Hook Context
 
-A Todo app that allows users to manage todo lists and tasks in a user-friendly interface. Also, It allows users to start a task timer for not completed todo tasks.
+A blog page using a blog API with async logic handled by React Hook Context.
 
-### Blog API + React Context
+### APP3: Blog API + Redux Thunk
 
-A blog page using a blog API with React Context
+A blog page using a blog API with:
 
-### Blog API + Redux AsyncThunk
-
-A blog page using a blog API with Redux AsyncThunk & Tunk middleware
+- Redux AsyncThunk and async logic inside of the redux slice.
+- Thunk middleware and async logic outside of the redux slice.
 
 ### Blog API + RTK Query
 
-A blog page using a blog API with Redux RTK Query
+A blog page using a blog API with Redux RTK Query and caching in the client side.
 
 ## Installation
 
@@ -50,6 +48,14 @@ A blog page using a blog API with Redux RTK Query
    ```
 
 6. Open your web browser to see the app in action.
+
+### Built with:
+
+- React & TypeScript
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Redux Persist](https://github.com/rt2zz/redux-persist)
+- AsyncThunk & Thunk middleware
+- [Redux RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
 
 ## License
 
