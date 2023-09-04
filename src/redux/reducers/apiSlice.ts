@@ -18,7 +18,7 @@ export const apiSlice = createApi({
           q: query || '',
         }
 
-        return `/posts?${new URLSearchParams(params)}`
+        return { url: `/posts`, method: 'GET', params }
       },
     }),
   }),
