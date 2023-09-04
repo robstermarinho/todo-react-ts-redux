@@ -8,7 +8,18 @@ export const apiSlice = createApi({
 
   endpoints: (builder) => ({
     getPosts: builder.query({
-      query: () => '/posts',
+      query: ({ page, limit, isPublished, query }) => {
+        const params = {
+          _page: page && page > 0 ? page : 1,
+          _sort: 'createdAt',
+          _order: 'desc',
+          _limit: limit && limit > 0 ? limit : 5,
+          isPublished: isPublished || false,
+          q: query || '',
+        }
+
+        return `/posts?${new URLSearchParams(params)}`
+      },
     }),
   }),
 })

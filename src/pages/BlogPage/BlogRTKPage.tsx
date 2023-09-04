@@ -1,28 +1,11 @@
 import { useState } from 'react'
-import { Spinner } from 'phosphor-react'
 import { useGetPostsQuery } from '../../redux/reducers/apiSlice'
-import { Link } from 'react-router-dom'
 import { Post } from '../../contexts/PostsContext'
-import { BlogPageContainer } from './styles'
+import { BlogPageContainer, CustomSwitch } from './styles'
 import InitLoading from '../../components/InitLoading'
 import { formatDistanceToNow } from 'date-fns'
+import * as Switch from '@radix-ui/react-switch'
 
-const PostExcerpt = ({ post }: { post: Post }) => {
-  console.log(post)
-  return (
-    <article className="post-excerpt" key={post.id}>
-      <h3>{post.title}</h3>
-      <div>
-        <span> {post.isPublished ? 'Published' : 'Draft'}</span>
-      </div>
-      <p className="post-content">{post.body.substring(0, 100)}</p>
-
-      <Link to={`/posts/${post.id}`} className="button muted-button">
-        View Post
-      </Link>
-    </article>
-  )
-}
 export function BlogRTKPage() {
   const [showPublished, setShowPublished] = useState(true)
 
@@ -33,14 +16,21 @@ export function BlogRTKPage() {
     isError,
     error,
   } = useGetPostsQuery({
-    isPublished: true,
+    page: 1,
+    limit: 5,
+    isPublished: showPublished,
+    query: '',
   })
 
   let apiError: string | null = null
 
   if (!isLoading && !isSuccess && isError) {
     console.log(error)
-    apiError = `${error.status} - Impossible to load posts now.`
+    apiError = `Impossible to load posts now.`
+  }
+  const handleOnCheckChange = (state: boolean) => {
+    console.log(isLoading, isSuccess, isError)
+    setShowPublished(state)
   }
 
   const renderPosts = () => {
@@ -53,6 +43,7 @@ export function BlogRTKPage() {
         <div className="postInfo">
           <div className="postInfoContent">
             <h2>{post.title}</h2>
+            <h4>{post.isPublished ? 'Published' : 'Draft'}</h4>
             <p>{post.body}</p>
           </div>
 
@@ -132,10 +123,25 @@ export function BlogRTKPage() {
     <BlogPageContainer>
       <h1>Redux with RTK Query (apiSlice)</h1>
       <h2>{showPublished ? 'Blog Posts' : 'Draft Posts'}</h2>
-      <div className="headerActions"></div>
+      <div className="headerActions">
+        <CustomSwitch>
+          <label className="Label" htmlFor="published-posts">
+            Published Posts
+          </label>
+          <Switch.Root
+            className="SwitchRoot"
+            id="published-posts"
+            onCheckedChange={handleOnCheckChange}
+            defaultChecked={showPublished}
+          >
+            <Switch.Thumb className="SwitchThumb" />
+          </Switch.Root>
+        </CustomSwitch>
+      </div>
 
       {apiError && <p>{apiError}</p>}
       {isLoading && <InitLoading />}
+
       <div className="postsList">{isSuccess && renderPosts()}</div>
     </BlogPageContainer>
   )
