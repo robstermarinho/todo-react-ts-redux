@@ -33,15 +33,32 @@ export function Header() {
           </li>
           <li>
             {' '}
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/">
+              {' '}
+              <span>Home</span>
+              <small>&nbsp;</small>
+            </NavLink>
           </li>
           <li>
             {' '}
-            <NavLink to="/blog">Blog (React Context)</NavLink>
+            <NavLink to="/blog">
+              <span>Blog</span>
+              <small>API + React Context</small>
+            </NavLink>
           </li>
           <li>
             {' '}
-            <NavLink to="/redux/blog">Blog (Redux AsyncThunk)</NavLink>
+            <NavLink to="/redux/blog">
+              <span>Blog</span>
+              <small>API + Redux AsyncThunk</small>
+            </NavLink>
+          </li>
+          <li>
+            {' '}
+            <NavLink to="/rtk/blog">
+              <span>Blog</span>
+              <small>API + RTK Query</small>
+            </NavLink>
           </li>
         </ul>
 

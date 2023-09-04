@@ -6,6 +6,7 @@ import { CyclePage } from './pages/CyclePage'
 import { BlogPage } from './pages/BlogPage'
 import { PostsProvider } from './contexts/PostsContext'
 import { BlogReduxPage } from './pages/BlogPage/BlogReduxPage'
+import { BlogRTKPage } from './pages/BlogPage/BlogRTKPage'
 
 export function Router() {
   return (
@@ -23,6 +24,7 @@ export function Router() {
           }
         />
         <Route path="redux/blog" element={<BlogReduxPage />} />
+        <Route path="rtk/blog" element={<BlogRTKPage />} />
       </Route>
     </Routes>
   )

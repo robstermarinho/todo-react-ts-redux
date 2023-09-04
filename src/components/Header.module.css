@@ -6,7 +6,7 @@
 }
 .header .headerContent {
   display: flex;
-  max-width: 46rem;
+  max-width: 66rem;
   align-items: center;
   width: 100%;
   margin-right: auto;
@@ -18,7 +18,7 @@
 .header .headerContent .headerMenu {
   list-style-type: none;
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   padding: 10px;
   justify-content: center;
   align-items: center;
@@ -27,10 +27,19 @@
   padding: 0px 10px;
 }
 .header .headerContent .headerMenu li a {
-  color: var(--gray-100);
   text-decoration: none;
-  font-size: 12px;
+  display: flex;
+  font-size: 14px;
+  color: var(--gray-100);
+  flex-direction: column;
 }
+.header .headerContent .headerMenu li a span {
+  margin-bottom: 0.5rem;
+}
+.header .headerContent .headerMenu li a small {
+  font-size: 10px;
+}
+
 .header .headerContent .headerMenu li a:hover {
   color: var(--gray-50);
 }

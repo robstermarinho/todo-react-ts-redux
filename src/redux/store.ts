@@ -8,6 +8,7 @@ import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
 import { TodosState } from '../@types/todo'
 import { CyclesState } from '../@types/cycle'
+import { apiSlice } from './reducers/apiSlice'
 
 const persistedTodoReducer = persistReducer(
   {
@@ -44,8 +45,9 @@ export const store = configureStore({
     todos: persistedTodoReducer,
     cycles: persistedCycleReducer,
     posts: persistedPostReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  middleware: [thunk],
+  middleware: [thunk, apiSlice.middleware],
 })
 
 export const persistor = persistStore(store)
