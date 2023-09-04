@@ -74,7 +74,14 @@ export const BlogPageContainer = styled.div`
     }
   }
 
-  .headerActions {
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .headerActions,
+  .footerActions {
     display: flex;
     max-width: 1200px;
     margin: 10px auto 0px auto;

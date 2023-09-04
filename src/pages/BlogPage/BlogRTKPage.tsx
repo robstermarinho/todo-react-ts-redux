@@ -5,18 +5,20 @@ import { BlogPageContainer, CustomSwitch } from './styles'
 import InitLoading from '../../components/InitLoading'
 import { formatDistanceToNow } from 'date-fns'
 import * as Switch from '@radix-ui/react-switch'
+import { SkipBack, SkipForward } from 'phosphor-react'
 
 export function BlogRTKPage() {
   const [showPublished, setShowPublished] = useState(true)
-
+  const [page, setPage] = useState(1)
   const {
     data: posts,
     isLoading,
+    isFetching,
     isSuccess,
     isError,
     error,
   } = useGetPostsQuery({
-    page: 1,
+    page,
     limit: 5,
     isPublished: showPublished,
     query: '',
@@ -140,8 +142,26 @@ export function BlogRTKPage() {
       </div>
 
       {apiError && <p>{apiError}</p>}
-      {isLoading && <InitLoading />}
+      {isLoading || (isFetching && <InitLoading />)}
 
+      {isSuccess && (
+        <div className="footerActions">
+          <button
+            className="btn"
+            disabled={page <= 1}
+            onClick={() => setPage((prev) => prev - 1)}
+          >
+            <SkipBack size={24} /> Previous
+          </button>
+          <button
+            className="btn"
+            disabled={posts && posts.length < 5}
+            onClick={() => setPage((prev) => prev + 1)}
+          >
+            Next <SkipForward size={24} />
+          </button>
+        </div>
+      )}
       <div className="postsList">{isSuccess && renderPosts()}</div>
     </BlogPageContainer>
   )

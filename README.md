@@ -5,11 +5,27 @@
 </p>
 <br/>
 
-# Todo App + Blog (API)
+## Built with:
 
-This is a Todo application built with React, TypeScript, Redux Toolkit and Redux Persist. The app allows users to manage todo lists and tasks in a user-friendly interface. Also, It allows users to start a task timer for not completed todo tasks.
+- React & TypeScript
+- Redux Toolkit, Redux Persist, AsyncThunk & Thunk middleware
+- Redux RTK Query
 
-Additionally, It has a blog page. It lists posts from a blog API.
+### Todo App
+
+A Todo app that allows users to manage todo lists and tasks in a user-friendly interface. Also, It allows users to start a task timer for not completed todo tasks.
+
+### Blog API + React Context
+
+A blog page using a blog API with React Context
+
+### Blog API + Redux AsyncThunk
+
+A blog page using a blog API with Redux AsyncThunk & Tunk middleware
+
+### Blog API + RTK Query
+
+A blog page using a blog API with Redux RTK Query
 
 ## Installation
 
