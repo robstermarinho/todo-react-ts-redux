@@ -2,7 +2,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { CyclesState } from '../../@types/cycle'
 import { v4 as uid } from 'uuid'
 import { reducerStateType } from '../store'
-import { TaskProps, TaskType } from '../../@types/todo'
+import { TaskType } from '../../@types/todo'
 
 export const initialCycleState: CyclesState = {
   cycles: [],

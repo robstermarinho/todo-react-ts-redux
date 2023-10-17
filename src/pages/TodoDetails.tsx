@@ -10,7 +10,7 @@ import { NavLink, useParams } from 'react-router-dom'
 
 import { ArrowCircleLeft, Clock } from 'phosphor-react'
 import { EmptyContainer } from '../components/EmptyContainer'
-import { TaskType, TodoType, TodosState } from '../@types/todo'
+import { TaskType } from '../@types/todo'
 import {
   addTodoTask,
   removeAllTodoTasks,

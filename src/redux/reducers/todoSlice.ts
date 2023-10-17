@@ -184,7 +184,7 @@ export const recalculateInfoAsync =
   }
 
 export const fetchDataExample = () => {
-  return async (dispatch: any, getState: any) => {
+  return async (_: any, getState: any) => {
     try {
       await fetch('http://localhost:3333/todos')
         .then((response) => response.json())

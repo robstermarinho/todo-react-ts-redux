@@ -1,5 +1,4 @@
-import { TaskType } from '../components/Task'
-import { TodoType } from '../components/Todo'
+import { TaskType, TodoType } from '../@types/todo'
 
 interface StorageProps {
   key: string

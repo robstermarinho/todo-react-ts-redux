@@ -2,6 +2,7 @@ import { produce } from 'immer'
 import { TodoActionTypes } from './actions'
 import { v4 as uid } from 'uuid'
 import { TaskType, TodoType, TodosState } from '../../@types/todo'
+import { getUnixTime } from 'date-fns'
 
 /**
  * Initial state for the todos reducer
@@ -70,7 +71,7 @@ export function todosReducer(state: TodosState, action: any) {
         id: uid(),
         title: action.payload.title,
         slug: action.payload.slug,
-        date: new Date(),
+        date: getUnixTime(new Date()),
         tasks: [],
       }
 

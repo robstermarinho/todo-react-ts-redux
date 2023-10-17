@@ -70,13 +70,13 @@ export function BlogReduxPage() {
     dispatch<any>(deletePost(postId))
   }
 
-  const handlePublishPost = (postId: string) => {
-    // TODO
-  }
+  // const handlePublishPost = (postId: string) => {
+  //   // TODO
+  // }
 
-  const handleUnpublishPost = (postId: string) => {
-    // TODO
-  }
+  // const handleUnpublishPost = (postId: string) => {
+  //   // TODO
+  // }
 
   const handleOnCheckChange = (state: boolean) => {
     dispatch<any>(

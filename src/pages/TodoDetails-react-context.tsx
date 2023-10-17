@@ -73,7 +73,10 @@ export function TodoDetails() {
 
   const toggleAllTasksState = (state: boolean) => {
     setTasks((previousTasks) => {
-      const newTasks = previousTasks.map((task) => ({ ...task, isDone: state }))
+      const newTasks = previousTasks.map((task) => ({
+        ...task,
+        isDone: state,
+      }))
 
       return newTasks
     })
