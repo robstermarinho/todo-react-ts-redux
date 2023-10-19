@@ -8,7 +8,9 @@ function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <StyleSheetManager shouldForwardProp={(prop) => prop !== 'theme'}>
-        <BrowserRouter basename="/todo-react-ts-redux">
+        <BrowserRouter
+          basename={import.meta.env.DEV ? '/' : '/todo-react-ts-redux/'}
+        >
           <AppInfoContextProvider>
             <Router />
           </AppInfoContextProvider>
