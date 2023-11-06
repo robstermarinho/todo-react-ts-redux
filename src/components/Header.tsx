@@ -12,7 +12,7 @@ import {
   selectInfo,
 } from '../redux/reducers/todoSlice'
 import { reducerStateType } from '../redux/store'
-
+import gitHubIcon from '../assets/github.svg'
 export function Header() {
   const info = useSelector(selectInfo)
   const numberOfPreviousCycles = useSelector(selectNumberOfPreviousCycles)
@@ -23,6 +23,23 @@ export function Header() {
 
   return (
     <header className={styles.header}>
+      <div className={styles.headerBadge}>
+        <a
+          href="https://github.com/robstermarinho/todo-react-ts-redux"
+          target="_blank"
+          title="Click here to access my repository"
+          rel="noreferrer"
+        >
+          Open on Github
+          <img
+            src={gitHubIcon}
+            alt=""
+            width={20}
+            height={20}
+            style={{ marginLeft: '10px' }}
+          />
+        </a>
+      </div>
       <div className={styles.headerContent}>
         <ul className={styles.headerMenu}>
           <li>
@@ -36,7 +53,6 @@ export function Header() {
             <NavLink to="/">
               {' '}
               <span>Home</span>
-              <small>&nbsp;</small>
             </NavLink>
           </li>
           <li>

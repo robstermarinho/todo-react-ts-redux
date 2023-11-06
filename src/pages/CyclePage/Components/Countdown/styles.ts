@@ -21,7 +21,10 @@ export const CountdownContainer = styled.div`
   color: var(--gray-100);
   display: flex;
   gap: 1rem;
-
+  @media (max-width: 768px) {
+    font-size: 3rem;
+    padding: 20px;
+  }
   span {
     background: var(--gray-700);
     padding: 2rem 1rem;

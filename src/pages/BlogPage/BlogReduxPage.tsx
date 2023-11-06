@@ -207,7 +207,7 @@ export function BlogReduxPage() {
             )
           }}
         >
-          Fetch posts using tunk middleware
+          Fetch
         </button>
       </div>
       <div className="headerActions">

@@ -57,6 +57,10 @@ A blog page using a blog API with Redux RTK Query and caching in the client side
 - AsyncThunk & Thunk middleware
 - [Redux RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
 
+### Demo
+
+See this app [live](https://robstermarinho.github.io/todo-react-ts-redux/).
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

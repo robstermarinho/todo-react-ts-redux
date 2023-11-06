@@ -9,6 +9,9 @@ export const CycleContainer = styled.main`
   justify-content: center;
 
   form {
+    @media (max-width: 768px) {
+      padding: 20px;
+    }
     gap: 2rem;
     display: flex;
     max-width: 46rem;

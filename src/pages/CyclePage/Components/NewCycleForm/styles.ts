@@ -18,6 +18,10 @@ export const FormContainer = styled.div`
   width: 100%;
   height: 4rem;
   gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `
 
 const BaseInput = styled.input`
